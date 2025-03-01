@@ -1,0 +1,62 @@
+import { FastifyInstance } from "fastify";
+
+export async function getAllCarts(fastify: FastifyInstance) {
+    return fastify.prisma.cart.findMany({
+        include: {
+            items: {
+                include: {
+                    product: true
+                }
+            }
+        }
+    });
+}
+
+export async function getCartById(fastify: FastifyInstance, id: number) {
+    return fastify.prisma.cart.findUnique({
+        where: { id },
+        include: {
+            items: {
+                include: {
+                    product: true
+                }
+            }
+        }
+    });
+}
+
+export async function getCartByUserId(fastify: FastifyInstance, userId: number) {
+    return fastify.prisma.cart.findUnique({
+        where: { userId },
+        include: {
+            items: {
+                include: {
+                    product: true
+                }
+            }
+        }
+    });
+}
+
+export async function createCart(fastify: FastifyInstance, data: any) {
+    return fastify.prisma.cart.create({ data });
+}
+
+export async function deleteCart(fastify: FastifyInstance, id: number) {
+    return fastify.prisma.cart.delete({ where: { id } });
+}
+
+export async function addItemToCart(fastify: FastifyInstance, data: any) {
+    return fastify.prisma.cartItem.create({ data });
+}
+
+export async function updateCartItem(fastify: FastifyInstance, id: number, data: any) {
+    return fastify.prisma.cartItem.update({
+        where: { id },
+        data
+    });
+}
+
+export async function removeCartItem(fastify: FastifyInstance, id: number) {
+    return fastify.prisma.cartItem.delete({ where: { id } });
+}

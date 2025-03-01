@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  email    String @unique
+  password String
+  cart     Cart?
+}
+
+model Category {
+  id   Int           @id @default(autoincrement())
+  name String  @unique
+  products Product[]
+}
+
+model Product {
+  id             Int          @id @default(autoincrement())
+  name           String
+  description    String
+  categoryId  Int
+  price         Decimal
+  imagePath      String
+  isDiscounted   Boolean  @default(false)
+  discountPercent Int     @default(0)
+  details        String
+  manufacturer   String
+  model          String
+
+  // Specyfikacje techniczne
+  processor      String? // Dla laptopów i telefonów
+  graphicsCard   String? // Dla laptopów
+  operatingSystem String? // Dla laptopów, telefonów, smartwatchy
+  batteryLife    String? // Dla laptopów, telefonów, smartwatchy, słuchawek bezprzewodowych
+  screenSize     String? // Dla laptopów, telefonów, smartwatchy
+  connectivity   String? // np. "WiFi, Bluetooth 5.0" - dla wszystkiego
+
+  cartItems      CartItem[]
+  category    Category @relation(fields: [categoryId], references: [id])
+}
+
+model Cart {
+  id       Int     @id @default(autoincrement())
+  userId   Int     @unique
+  user     User    @relation(fields: [userId], references: [id])
+  items    CartItem[]
+}
+
+model CartItem {
+  id        Int     @id @default(autoincrement())
+  cartId    Int
+  productId Int
+  quantity  Int     @default(1)
+  
+  cart     Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product  Product  @relation(fields: [productId], references: [id])
+}
