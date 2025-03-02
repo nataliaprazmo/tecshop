@@ -7,11 +7,15 @@ import {
     deleteCart,
     addItemToCart,
     updateCartItem,
-    removeCartItem
+    removeCartItem,
+    addMultipleItemsToCart,
+    getCartItems,
+    clearCart
 } from "../services/cart.service";
 
 interface Params { 
     id: string;
+    cartId: string;
     userId: string;
     itemId: string;
 }
@@ -20,6 +24,10 @@ interface CartItemBody {
     cartId: number;
     productId: number;
     quantity: number;
+}
+
+interface MultipleCartItemsBody {
+    items: CartItemBody[];
 }
 
 // Cart Controllers
@@ -103,5 +111,61 @@ export async function removeCartItemHandler(request: FastifyRequest<{ Params: Pa
         reply.status(204).send();
     } catch (error) {
         reply.status(400).send({ error: "Could not remove item from cart" });
+    }
+}
+
+export async function addMultipleCartItemsHandler(
+    request: FastifyRequest<{ Body: MultipleCartItemsBody }>, 
+    reply: FastifyReply
+) {
+    try {
+        const { items } = request.body;
+        
+        if (!Array.isArray(items) || items.length === 0) {
+            return reply.status(400).send({ error: "Items array is required and must not be empty" });
+        }
+        
+        // Validate each item
+        for (const item of items) {
+            if (!item.cartId || !item.productId || item.quantity <= 0) {
+                return reply.status(400).send({ 
+                    error: "Each item must have cartId, productId, and a positive quantity" 
+                });
+            }
+        }
+        
+        const cartItems = await addMultipleItemsToCart(request.server, items);
+        reply.status(201).send(cartItems);
+    } catch (error) {
+        reply.status(400).send({ error: "Could not add items to cart" });
+    }
+}
+
+export async function getCartItemsHandler(
+    request: FastifyRequest<{ Params: Params }>, 
+    reply: FastifyReply
+) {
+    try {
+        const cartId = Number(request.params.cartId);
+        const cartItems = await getCartItems(request.server, cartId);
+        reply.send(cartItems);
+    } catch (error) {
+        reply.status(500).send({ error: "Error fetching cart items" });
+    }
+}
+
+export async function clearCartHandler(
+    request: FastifyRequest<{ Params: Params }>, 
+    reply: FastifyReply
+) {
+    try {
+        const cartId = Number(request.params.cartId);
+        const result = await clearCart(request.server, cartId);
+        reply.send({ 
+            message: `Removed ${result.count} items from cart`,
+            removedItems: result.count
+        });
+    } catch (error) {
+        reply.status(400).send({ error: "Could not clear cart" });
     }
 }

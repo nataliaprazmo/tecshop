@@ -1,10 +1,53 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { getAllProducts, getProductById, createProduct, deleteProduct } from "../services/product.service";
+import { 
+    getAllProducts, 
+    getProductById, 
+    getProductsByCategory,
+    getDiscountedProducts,
+    applyDiscountToCategory,
+    removeDiscountFromCategory,
+    createProduct, 
+    deleteProduct 
+} from "../services/product.service";
 
 interface Params { id: string; }
 
-export async function getProducts(request: FastifyRequest, reply: FastifyReply) {
+interface CategoryParams { 
+    id: string;
+    categoryId: string;
+}
+
+interface QueryParams {
+    discounted?: string;
+    categoryId?: string;
+}
+
+interface DiscountBody {
+    categoryIds: number[];
+    discountPercent: number;
+}
+
+export async function getProducts(
+    request: FastifyRequest<{ Querystring: QueryParams }>, 
+    reply: FastifyReply
+) {
     try {
+        const { discounted, categoryId } = request.query;
+        
+        // If discounted flag is present, return discounted products
+        if (discounted === 'true') {
+            const categoryIdNum = categoryId ? Number(categoryId) : undefined;
+            const products = await getDiscountedProducts(request.server, categoryIdNum);
+            return reply.send(products);
+        }
+        
+        // If only categoryId is present, return products by category
+        if (categoryId) {
+            const products = await getProductsByCategory(request.server, Number(categoryId));
+            return reply.send(products);
+        }
+        
+        // Otherwise return all products
         const products = await getAllProducts(request.server);
         reply.send(products);
     } catch (error) {
@@ -23,12 +66,77 @@ export async function getProduct(request: FastifyRequest<{ Params: Params }>, re
     }
 }
 
+export async function getProductsByCategoryHandler(
+    request: FastifyRequest<{ Params: CategoryParams }>, 
+    reply: FastifyReply
+) {
+    try {
+        const categoryId = Number(request.params.categoryId);
+        const products = await getProductsByCategory(request.server, categoryId);
+        reply.send(products);
+    } catch (error) {
+        reply.status(500).send({ error: "Error fetching products by category" });
+    }
+}
+
 export async function createProductHandler(request: FastifyRequest<{ Body: any }>, reply: FastifyReply) {
     try {
         const product = await createProduct(request.server, request.body);
         reply.status(201).send(product);
     } catch (error) {
         reply.status(400).send({ error: "Could not create product" });
+    }
+}
+
+export async function applyDiscountHandler(
+    request: FastifyRequest<{ Body: DiscountBody }>,
+    reply: FastifyReply
+) {
+    try {
+        const { categoryIds, discountPercent } = request.body;
+        
+        if (!Array.isArray(categoryIds) || !categoryIds.length) {
+            return reply.status(400).send({ error: "At least one category ID is required" });
+        }
+        
+        if (discountPercent < 0 || discountPercent > 100) {
+            return reply.status(400).send({ error: "Discount percentage must be between 0 and 100" });
+        }
+        
+        const result = await applyDiscountToCategory(
+            request.server, 
+            categoryIds, 
+            discountPercent
+        );
+        
+        reply.status(200).send({ 
+            message: `Discount applied to ${result.count} products`,
+            affectedProducts: result.count
+        });
+    } catch (error) {
+        reply.status(500).send({ error: "Error applying discount" });
+    }
+}
+
+export async function removeDiscountHandler(
+    request: FastifyRequest<{ Body: { categoryIds: number[] } }>,
+    reply: FastifyReply
+) {
+    try {
+        const { categoryIds } = request.body;
+        
+        if (!Array.isArray(categoryIds) || !categoryIds.length) {
+            return reply.status(400).send({ error: "At least one category ID is required" });
+        }
+        
+        const result = await removeDiscountFromCategory(request.server, categoryIds);
+        
+        reply.status(200).send({ 
+            message: `Discount removed from ${result.count} products`,
+            affectedProducts: result.count
+        });
+    } catch (error) {
+        reply.status(500).send({ error: "Error removing discount" });
     }
 }
 

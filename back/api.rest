@@ -11,10 +11,9 @@ GET http://localhost:5000/api/carts HTTP/1.1
 ###
 
 # Carts - Get specific cart by ID
-GET http://localhost:5000/api/carts/1 HTTP/1.1
+GET http://localhost:5000/api/carts/5 HTTP/1.1
 ###
 
-# TODO
 # Carts - Create new cart 
 POST http://localhost:5000/api/carts HTTP/1.1
 content-type: application/json
@@ -24,25 +23,26 @@ content-type: application/json
 }
 ###
 
-# Carts - Delete cart
-DELETE http://localhost:5000/api/carts/1 HTTP/1.1
+
 ###
 
-# TODO
+# Carts - Delete cart
+DELETE http://localhost:5000/api/carts/4 HTTP/1.1
+###
+
 # Cart Items - Add item to cart
 POST http://localhost:5000/api/cart-items HTTP/1.1
 content-type: application/json
 
 {
-  "cartId": 1,
+  "cartId": 5,
   "productId": 2,
   "quantity": 3
 }
 ###
 
-# TODO
 # Cart Items - Update item quantity
-PATCH http://localhost:5000/api/cart-items/1 HTTP/1.1
+PATCH http://localhost:5000/api/cart-items/6 HTTP/1.1
 content-type: application/json
 
 {
@@ -50,9 +50,8 @@ content-type: application/json
 }
 ###
 
-# TODO
 # Cart Items - Remove item from cart
-DELETE http://localhost:5000/api/cart-items/1 HTTP/1.1
+DELETE http://localhost:5000/api/cart-items/6 HTTP/1.1
 ###
 
 # Users - Get all users
@@ -63,23 +62,31 @@ GET http://localhost:5000/api/users HTTP/1.1
 GET http://localhost:5000/api/users/1 HTTP/1.1
 ###
 
-# TODO
 # Users - Create new user
 POST http://localhost:5000/api/users HTTP/1.1
 content-type: application/json
 
 {
-  "name": "John Doe",
+  "username": "JohnDoe",
+  "email": "john@example.com",
+  "password": "securepassword"
+}
+###
+
+# Users - Login
+POST http://localhost:5000/api/login HTTP/1.1
+Content-Type: application/json
+
+{
   "email": "john@example.com",
   "password": "securepassword"
 }
 ###
 
 # Users - Delete user
-DELETE http://localhost:5000/api/users/3 HTTP/1.1
+DELETE http://localhost:5000/api/users/5 HTTP/1.1
 ###
 
-# TODO
 # User's cart - Get cart for specific user
 GET http://localhost:5000/api/users/1/cart HTTP/1.1
 ###
@@ -92,7 +99,6 @@ GET http://localhost:5000/api/products HTTP/1.1
 GET http://localhost:5000/api/products/1 HTTP/1.1
 ###
 
-# TODO
 # Products - Create new product
 POST http://localhost:5000/api/products HTTP/1.1
 content-type: application/json
@@ -100,11 +106,85 @@ content-type: application/json
 {
   "name": "Sample Product",
   "description": "This is a sample product",
+  "categoryId": 1,
   "price": 29.99,
-  "stock": 100
+  "imagePath": "C:/Users/nomzarp/projects/mgr_app/back/products/sony_wh1000xm4.png", 
+  "details": "Product description lorem ipsum dolor et lorem ipsum", 
+  "manufacturer": "Sony", 
+  "model": "WH-1000XM4", 
+  "batteryLife": "30h", 
+  "connectivity": "Bluetooth 5.0"
 }
 ###
 
 # Products - Delete product
-DELETE http://localhost:5000/api/products/1 HTTP/1.1
+DELETE http://localhost:5000/api/products/11 HTTP/1.1
+###
+
+# Get products by category (query param approach)
+GET http://localhost:5000/api/products?categoryId=2 HTTP/1.1
+###
+
+# Get products by category (dedicated endpoint)
+GET http://localhost:5000/api/categories/3/products HTTP/1.1
+###
+
+# Get discounted products
+GET http://localhost:5000/api/products?discounted=true HTTP/1.1
+###
+
+# Get discounted products in specific category
+GET http://localhost:5000/api/products?discounted=true&categoryId=3 HTTP/1.1
+###
+
+# Apply discount to products in categories
+POST http://localhost:5000/api/products/discounts HTTP/1.1
+content-type: application/json
+
+{
+  "categoryIds": [2, 3],
+  "discountPercent": 20
+}
+###
+
+# Remove discounts from products in categories
+DELETE http://localhost:5000/api/products/discounts HTTP/1.1
+content-type: application/json
+
+{
+  "categoryIds": [2, 3]
+}
+###
+
+# Add multiple items to cart
+POST http://localhost:5000/api/cart-items/bulk HTTP/1.1
+content-type: application/json
+
+{
+  "items": [
+    {
+      "cartId": 5,
+      "productId": 2,
+      "quantity": 1
+    },
+    {
+      "cartId": 5,
+      "productId": 3,
+      "quantity": 2
+    },
+    {
+      "cartId": 5,
+      "productId": 5,
+      "quantity": 1
+    }
+  ]
+}
+###
+
+# Get all items in a cart
+GET http://localhost:5000/api/carts/5/items HTTP/1.1
+###
+
+# Clear all items from a cart
+DELETE http://localhost:5000/api/carts/5/items HTTP/1.1
 ###

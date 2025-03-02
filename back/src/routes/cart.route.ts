@@ -7,7 +7,10 @@ import {
     deleteCartHandler,
     addCartItemHandler,
     updateCartItemHandler,
-    removeCartItemHandler
+    removeCartItemHandler,
+    addMultipleCartItemsHandler,
+    getCartItemsHandler,
+    clearCartHandler
 } from "../controllers/cart.controller";
 
 export default async function cartRoutes(fastify: FastifyInstance) {
@@ -20,6 +23,9 @@ export default async function cartRoutes(fastify: FastifyInstance) {
     
     // Cart item routes
     fastify.post("/cart-items", addCartItemHandler);
+    fastify.post("/cart-items/bulk", addMultipleCartItemsHandler);
+    fastify.get("/carts/:cartId/items", getCartItemsHandler);
+    fastify.delete("/carts/:cartId/items", clearCartHandler);
     fastify.patch("/cart-items/:itemId", updateCartItemHandler);
     fastify.delete("/cart-items/:itemId", removeCartItemHandler);
 }

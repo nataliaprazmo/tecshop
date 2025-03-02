@@ -60,3 +60,35 @@ export async function updateCartItem(fastify: FastifyInstance, id: number, data:
 export async function removeCartItem(fastify: FastifyInstance, id: number) {
     return fastify.prisma.cartItem.delete({ where: { id } });
 }
+
+export async function addMultipleItemsToCart(fastify: FastifyInstance, items: any[]) {
+    // Use transaction to ensure all items are added or none
+    return fastify.prisma.$transaction(
+        items.map(item => 
+            fastify.prisma.cartItem.create({ 
+                data: item,
+                include: {
+                    product: true
+                }
+            })
+        )
+    );
+}
+
+export async function getCartItems(fastify: FastifyInstance, cartId: number) {
+    return fastify.prisma.cartItem.findMany({
+        where: { cartId },
+        include: {
+            product: true
+        },
+        orderBy: {
+            id: 'asc'
+        }
+    });
+}
+
+export async function clearCart(fastify: FastifyInstance, cartId: number) {
+    return fastify.prisma.cartItem.deleteMany({
+        where: { cartId }
+    });
+}

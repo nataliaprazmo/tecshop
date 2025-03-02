@@ -9,17 +9,10 @@ import categoryRoutes from "./routes/category.route";
 import userRoutes from "./routes/user.route";
 import productRoutes from "./routes/product.route";
 import cartRoutes from "./routes/cart.route";
+import auth from "./plugins/auth";
 
 const fastify = Fastify({
-	logger: {
-		transport: {
-			target: "pino-pretty",
-			options: {
-				translateTime: "HH:MM:ss Z",
-				ignore: "pid,hostname",
-			},
-		},
-	},
+	logger: true
 });
 
 // allow frontend
@@ -37,6 +30,7 @@ fastify.register(cartRoutes, { prefix: "/api" });
 
 // register plugins
 fastify.register(prisma);
+fastify.register(auth);
 
 // TEST
 fastify.get("/", async () => {
