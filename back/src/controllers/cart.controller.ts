@@ -51,9 +51,20 @@ export async function getCart(request: FastifyRequest<{ Params: Params }>, reply
     }
 }
 
-export async function getUserCart(request: FastifyRequest<{ Params: Params }>, reply: FastifyReply) {
+// export async function getUserCart(request: FastifyRequest<{ Params: Params }>, reply: FastifyReply) {
+//     try {
+//         const userId = Number(request.params.userId);
+//         const cart = await getCartByUserId(request.server, userId);
+//         if (!cart) return reply.status(404).send({ error: "Cart not found for this user" });
+//         reply.send(cart);
+//     } catch (error) {
+//         reply.status(500).send({ error: "Error fetching user cart" });
+//     }
+// }
+
+export async function getUserCart(request: FastifyRequest, reply: FastifyReply) {
     try {
-        const userId = Number(request.params.userId);
+        const userId = Number(request.user.id);
         const cart = await getCartByUserId(request.server, userId);
         if (!cart) return reply.status(404).send({ error: "Cart not found for this user" });
         reply.send(cart);

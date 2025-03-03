@@ -2,7 +2,7 @@ import { Search } from "react-feather";
 
 const SearchInput: React.FC = () => {
   return (
-    <div className="flex items-center border border-gray-400 rounded-md gap-4 2xl:gap-6 px-4 2xl:px-6 py-2 2xl:py-3 w-fit max-w-80">
+    <div className="flex items-center border border-gray-400 rounded-xl gap-4 2xl:gap-6 px-4 2xl:px-6 py-2 2xl:py-3 w-fit max-w-80">
       <input
         type="text"
         placeholder="Szukaj produktów..."

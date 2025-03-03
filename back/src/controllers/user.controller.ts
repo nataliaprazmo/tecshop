@@ -74,7 +74,7 @@ export async function loginUser(
 				path: "/",
 				maxAge: 60 * 60,
 			})
-			.send({ message: "Login successful" });
+			.send({ message: "Login successful", userId: user.id });
 	} catch (error) {
 		reply.status(500).send({ message: "Error loging user in", error });
 	}

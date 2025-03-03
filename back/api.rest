@@ -130,7 +130,7 @@ GET http://localhost:5000/api/products?categoryId=2 HTTP/1.1
 ###
 
 # Get products by category (dedicated endpoint)
-GET http://localhost:5000/api/categories/3/products HTTP/1.1
+GET http://localhost:5000/api/categories/5/products HTTP/1.1
 ###
 
 # Get discounted products
@@ -141,13 +141,17 @@ GET http://localhost:5000/api/products?discounted=true HTTP/1.1
 GET http://localhost:5000/api/products?discounted=true&categoryId=3 HTTP/1.1
 ###
 
+#Get all products with filters
+GET http://localhost:5000/api/products/filtered?categoryId=5 HTTP/1.1
+###
+
 # Apply discount to products in categories
 POST http://localhost:5000/api/products/discounts HTTP/1.1
 content-type: application/json
 
 {
-  "categoryIds": [2, 3],
-  "discountPercent": 20
+  "categoryIds": [5],
+  "discountPercent": 25
 }
 ###
 

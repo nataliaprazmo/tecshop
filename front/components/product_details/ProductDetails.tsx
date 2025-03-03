@@ -11,7 +11,7 @@ interface ProductDetailsComponentProps {
   }
 
 const ProductDetails: React.FC<ProductDetailsComponentProps> = ({productId}) => {
-    const [product, setProduct] = useState<ProductDetailsProps | null>(null);
+  const [product, setProduct] = useState<ProductDetailsProps | null>(null);
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
@@ -42,7 +42,7 @@ const ProductDetails: React.FC<ProductDetailsComponentProps> = ({productId}) => 
     return <div className="container px-20 py-16 text-2xl h-screen">
       <div className="flex gap-4 items-center">
         <Loader className="animate-spin"/> 
-        <p>Loading product...</p>
+        <p>Ładuję produkt...</p>
         </div>
       </div>;
   }
@@ -51,7 +51,7 @@ const ProductDetails: React.FC<ProductDetailsComponentProps> = ({productId}) => 
     return <div className="container px-20 py-16 text-2xl h-screen">
       <div className="flex gap-4 items-center">
         <Frown />
-        <p>Product not found</p>
+        <p>Nie znaleziono produktu</p>
       </div>
       </div>;
   }

@@ -15,10 +15,9 @@ async function seed() {
 	console.log("Kategorie dodane.");
 
   // Dodanie użytkowników
-  const createdUsers = [];
   for (const user of users) {
     const newUser = await prisma.user.create({ data: user });
-    createdUsers.push(newUser);
+    await prisma.cart.create({ data: { userId: newUser.id } });
   }
   console.log("Użytkownicy dodani.");
 
@@ -27,15 +26,22 @@ async function seed() {
   for (const product of products) {
     const category = await prisma.category.findUnique({ where: { id: product.categoryId } });
     if (category) {
+      const discountPercent =
+        category.name === 'smartwatch' ? 10 :
+        category.name === 'słuchawki bezprzewodowe' ? 25 :
+        undefined;
+
       const newProduct = await prisma.product.create({
         data: {
           name: product.name,
           description: product.description,
           price: product.price,
           imagePath: product.imagePath,
+          isDiscounted: discountPercent !== undefined,
+          discountPercent: discountPercent,
           manufacturer: product.manufacturer,
           model: product.model,
-		  details: product.details,
+		      details: product.details,
           batteryLife: product.batteryLife,
           connectivity: product.connectivity,
           processor: product.processor,
@@ -48,12 +54,6 @@ async function seed() {
     }
   }
   console.log("Produkty dodane.");
-
-  // Dodanie koszyka dla użytkownika 1
-  const cart = await prisma.cart.create({ data: { userId: createdUsers[0].id } });
-  await prisma.cartItem.create({ data: { cartId: cart.id, productId: createdProducts[0].id, quantity: 1 } });
-  await prisma.cartItem.create({ data: { cartId: cart.id, productId: createdProducts[1].id, quantity: 1 } });
-  console.log("Koszyk użytkownika 1 utworzony.");
 }
 
 seed()

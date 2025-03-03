@@ -43,24 +43,24 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [guestCartSynced, setGuestCartSynced] = useState(false);
 
   // Check authentication status and get user ID
-  useEffect(() => {
-    const checkAuthStatus = async () => {
-      try {
-        const response = await fetch('/api/auth/status');
-        if (response.ok) {
-          const data = await response.json();
-          setIsAuthenticated(data.authenticated);
-          if (data.authenticated && data.userId) {
-            setUserId(data.userId);
-          }
-        }
-      } catch (error) {
-        console.error('Failed to check authentication status:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const checkAuthStatus = async () => {
+  //     try {
+  //       const response = await fetch('/api/auth/status');
+  //       if (response.ok) {
+  //         const data = await response.json();
+  //         setIsAuthenticated(data.authenticated);
+  //         if (data.authenticated && data.userId) {
+  //           setUserId(data.userId);
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error('Failed to check authentication status:', error);
+  //     }
+  //   };
 
-    checkAuthStatus();
-  }, []);
+  //   checkAuthStatus();
+  // }, []);
 
   // Get user's cart when authenticated
   useEffect(() => {
@@ -105,7 +105,10 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     
     setIsLoading(true);
     try {
-      const response = await fetch(`${BASE_URL}/users/${userId}/cart`);
+      const response = await fetch(`${BASE_URL}/users/cart`, {
+        method: "GET",
+        credentials: "include",
+    });
       if (response.ok) {
         const cartData = await response.json();
         setCartId(cartData.id);
@@ -351,7 +354,10 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     
     // Get user's cart
     try {
-      const response = await fetch(`${BASE_URL}/users/${newUserId}/cart`);
+      const response = await fetch(`${BASE_URL}/users/cart`, {
+        method: "GET",
+        credentials: "include",
+    });
       if (response.ok) {
         const cartData = await response.json();
         setCartId(cartData.id);

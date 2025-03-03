@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="pl">
       <body
-        className={`${openSans.variable} antialiased`}
+        className={`${openSans.variable} antialiased overflow-x-hidden`}
       >
         <Header/>
         <main>{children}</main>

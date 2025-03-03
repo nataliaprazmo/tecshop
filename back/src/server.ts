@@ -22,15 +22,15 @@ fastify.register(cors, {
 	credentials: true,
 });
 
+// register plugins
+fastify.register(prisma);
+fastify.register(auth);
+
 // register routes
 fastify.register(categoryRoutes, { prefix: "/api" });
 fastify.register(userRoutes, { prefix: "/api" });
 fastify.register(productRoutes, { prefix: "/api" });
 fastify.register(cartRoutes, { prefix: "/api" });
-
-// register plugins
-fastify.register(prisma);
-fastify.register(auth);
 
 // TEST
 fastify.get("/", async () => {

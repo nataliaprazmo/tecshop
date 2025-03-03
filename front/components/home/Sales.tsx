@@ -10,14 +10,14 @@ const Sales:React.FC=()=>{
           subtitle: "Wszystkie Smartwatche",
           discount: "-10%",
           image: "/images/smartwatch.png",
-          href: "/promocje/smartwatche",
+          href: "/products/4",
         },
         {
           title: "WYPRZEDAŻ",
           subtitle: "Słuchawki bezprzewodowe",
-          discount: "do -40%",
+          discount: "-25%",
           image: "/images/headphones.png",
-          href: "/promocje/sluchawki",
+          href: "/products/5",
         },
       ];
       return (

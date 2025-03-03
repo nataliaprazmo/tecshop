@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import SearchInput from '../ui/SearchInput';
 import {ShoppingCart, ChevronDown} from "react-feather";
+import { Button } from '../ui/Button';
 
 const Header: React.FC = () => {
     return <header className='w-screen overflow-hidden flex items-center justify-between px-20 py-8 shadow'>
@@ -13,15 +14,14 @@ const Header: React.FC = () => {
           </div>
           <div className='flex items-center gap-8 2xl:gap-10'>
             <SearchInput />
-            <Link 
-            href="/login" 
-            className="2xl:py-3 py-2 2xl:px-9 px-4 border border-gray-400 rounded-md hover:bg-gray-100 transition-colors"
-          >
-            Zaloguj się
-          </Link>
+            <Link href="/login">
+        <Button variant='outline'>
+          Zaloguj się
+        </Button>
+      </Link>
           <Link 
-            href="/koszyk" 
-            className="flex items-center font-semibold bg-gradient-to-r hover:bg-gradient-to-l from-primary to-secondary text-transparent bg-clip-text transition-colors text-base 2xl:text-xl"
+            href="/cart" 
+            className="flex items-center font-semibold bg-gradient-to-r hover:scale-110 hover:bg-gradient-to-l from-primary to-secondary text-transparent bg-clip-text transition-all text-base 2xl:text-xl"
           >
             <ShoppingCart className='text-primary'/>
             <span className="ml-2 2xl:ml-3">Koszyk</span>

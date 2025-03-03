@@ -7,7 +7,8 @@ import {
     applyDiscountToCategory,
     removeDiscountFromCategory,
     createProduct, 
-    deleteProduct 
+    deleteProduct,
+    getFilteredProducts
 } from "../services/product.service";
 
 interface Params { id: string; }
@@ -20,6 +21,10 @@ interface CategoryParams {
 interface QueryParams {
     discounted?: string;
     categoryId?: string;
+    priceMin?: string;
+    priceMax?: string;
+    sortBy?: string;
+    sortOrder?: string;
 }
 
 interface DiscountBody {
@@ -32,7 +37,7 @@ export async function getProducts(
     reply: FastifyReply
 ) {
     try {
-        const { discounted, categoryId } = request.query;
+        const { discounted, categoryId} = request.query;
         
         // If discounted flag is present, return discounted products
         if (discounted === 'true') {
@@ -51,6 +56,39 @@ export async function getProducts(
         const products = await getAllProducts(request.server);
         reply.send(products);
     } catch (error) {
+        reply.status(500).send({ error: "Error fetching products" });
+    }
+}
+
+export async function getFilteredProductsHandler(
+    request: FastifyRequest<{ Querystring: QueryParams }>,
+    reply: FastifyReply
+) {
+    try {
+        const { 
+            discounted, 
+            categoryId, 
+            priceMin, 
+            priceMax,
+            sortBy,
+            sortOrder
+        } = request.query;
+        
+        // Convert parameters to appropriate types
+        const filters = {
+            categoryId: categoryId ? Number(categoryId) : undefined,
+            isDiscounted: discounted === 'true' || undefined,
+            priceMin: priceMin ? Number(priceMin) : undefined,
+            priceMax: priceMax ? Number(priceMax) : undefined,
+            sortBy: sortBy === 'price' ? 'price' : undefined,
+            sortOrder: sortOrder === 'desc' ? 'desc' as const : 'asc' as const
+        };
+
+        // Use the new combined filter function
+        const products = await getFilteredProducts(request.server, filters);
+        return reply.send(products);
+    } catch (error) {
+        console.error('Error fetching products:', error);
         reply.status(500).send({ error: "Error fetching products" });
     }
 }

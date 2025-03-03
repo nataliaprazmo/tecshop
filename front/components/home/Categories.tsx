@@ -3,11 +3,11 @@ import Link from "next/link";
 
 const Categories:React.FC=()=>{
     const categories: CategoryProps[] = [
-        { name: "Laptopy", href: "/kategoria/laptopy" },
-        { name: "Smartphony", href: "/kategoria/smartphony" },
-        { name: "Smartwatche", href: "/kategoria/smartwatche" },
-        { name: "Tablety", href: "/kategoria/tablety" },
-        { name: "Akcesoria", href: "/kategoria/akcesoria" },
+        { name: "Laptopy", href: "/products/1" },
+        { name: "Smartphony", href: "/products/2" },
+        { name: "Smartwatche", href: "/products/4" },
+        { name: "Tablety", href: "/products/3" },
+        { name: "Akcesoria", href: "/products/5" },
       ];
 
       return (
@@ -19,7 +19,7 @@ const Categories:React.FC=()=>{
                 <Link
                   key={category.name}
                   href={category.href}
-                  className="bg-indigo-100 shadow-sm border border-gray-200 rounded-lg p-8 text-center hover:bg-blue-100 transition-colors"
+                  className="bg-indigo-100 shadow border border-indigo-200 rounded-lg p-8 text-center hover:bg-indigo-200 hover:scale-105 transition-all"
                 >
                   <span className="font-bold text-lg 2xl:text-xl">{category.name}</span>
                 </Link>

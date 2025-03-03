@@ -21,7 +21,7 @@ const ProductInfo:React.FC<ProductDetailsProps> = ({
     screenSize,
     connectivity
   }) => {
-    const finalPrice = isDiscounted ? price * (1 - discountPercent / 100) : price;
+    const finalPrice = isDiscounted && discountPercent ? price * (1 - discountPercent / 100) : price;
     const [quantity, setQuantity] = useState(1);
     const [activeAccordion, setActiveAccordion] = useState<number | null>(0);
     const [categoryName, setCategoryName] = useState("produkt");
@@ -89,8 +89,13 @@ const ProductInfo:React.FC<ProductDetailsProps> = ({
         <div className="flex justify-between items-start mb-2">
               <h1 className="text-3xl font-bold text-gray-900">{name}</h1>
               <p className="text-3xl font-bold text-primary">
-                {finalPrice}
-                <span className="ml-1">zł</span>
+                {isDiscounted ? (
+                    <>
+                    <span className="line-through text-gray-400 font-normal text-sm -mb-1">{price}zł</span>{" "}
+                    {finalPrice.toFixed(2)}zł</>
+                ) : (
+                    `${price}zł`
+                )}
               </p>
             </div>
             <span
