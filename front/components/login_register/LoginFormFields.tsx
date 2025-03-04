@@ -34,7 +34,6 @@ const LoginFormFields: React.FC<LoginFormFieldsProps> = ({
         onBlur={handleBlur}
         error={errors.email}
         touched={!!touched.email}
-        helperText="Email musi zawierać @ oraz nazwę domeny po znaku ."
       />
 
       {/* Password Input */}

@@ -10,7 +10,8 @@ import {
     removeCartItem,
     addMultipleItemsToCart,
     getCartItems,
-    clearCart
+    clearCart,
+    getCartIdByUserId,
 } from "../services/cart.service";
 
 interface Params { 
@@ -21,7 +22,6 @@ interface Params {
 }
 
 interface CartItemBody {
-    cartId: number;
     productId: number;
     quantity: number;
 }
@@ -50,17 +50,6 @@ export async function getCart(request: FastifyRequest<{ Params: Params }>, reply
         reply.status(500).send({ error: "Error fetching cart" });
     }
 }
-
-// export async function getUserCart(request: FastifyRequest<{ Params: Params }>, reply: FastifyReply) {
-//     try {
-//         const userId = Number(request.params.userId);
-//         const cart = await getCartByUserId(request.server, userId);
-//         if (!cart) return reply.status(404).send({ error: "Cart not found for this user" });
-//         reply.send(cart);
-//     } catch (error) {
-//         reply.status(500).send({ error: "Error fetching user cart" });
-//     }
-// }
 
 export async function getUserCart(request: FastifyRequest, reply: FastifyReply) {
     try {
@@ -95,7 +84,16 @@ export async function deleteCartHandler(request: FastifyRequest<{ Params: Params
 // Cart Item Controllers
 export async function addCartItemHandler(request: FastifyRequest<{ Body: CartItemBody }>, reply: FastifyReply) {
     try {
-        const cartItem = await addItemToCart(request.server, request.body);
+        const userId = Number(request.user.id);
+        const cart = await getCartIdByUserId(request.server, userId);
+
+        if (!cart) {
+            return reply.status(404).send({ error: "Cart not found" });
+        }
+
+        console.log({"cartId": cart.id, ...request.body});
+
+        const cartItem = await addItemToCart(request.server, {"cartId": cart.id, ...request.body});
         reply.status(201).send(cartItem);
     } catch (error) {
         reply.status(400).send({ error: "Could not add item to cart" });
@@ -131,22 +129,27 @@ export async function addMultipleCartItemsHandler(
 ) {
     try {
         const { items } = request.body;
+        const userId = Number(request.user.id);
+        const cart = await getCartIdByUserId(request.server, userId);
+
+        if (!cart) {
+            return reply.status(404).send({ error: "Cart not found" });
+        }
         
         if (!Array.isArray(items) || items.length === 0) {
             return reply.status(400).send({ error: "Items array is required and must not be empty" });
         }
         
         // Validate each item
-        for (const item of items) {
-            if (!item.cartId || !item.productId || item.quantity <= 0) {
-                return reply.status(400).send({ 
-                    error: "Each item must have cartId, productId, and a positive quantity" 
-                });
+        const cartItems = items.map(item => {
+            if (!item.productId || item.quantity <= 0) {
+                throw new Error("Each item must have productId and a positive quantity");
             }
-        }
+            return { ...item, cartId: cart.id };
+        });
         
-        const cartItems = await addMultipleItemsToCart(request.server, items);
-        reply.status(201).send(cartItems);
+        const createdCartItems = await addMultipleItemsToCart(request.server, cartItems);
+        reply.status(201).send(createdCartItems);
     } catch (error) {
         reply.status(400).send({ error: "Could not add items to cart" });
     }
@@ -170,8 +173,14 @@ export async function clearCartHandler(
     reply: FastifyReply
 ) {
     try {
-        const cartId = Number(request.params.cartId);
-        const result = await clearCart(request.server, cartId);
+        const userId = Number(request.user.id);
+        const cart = await getCartIdByUserId(request.server, userId);
+
+        if (!cart) {
+            return reply.status(404).send({ error: "Cart not found" });
+        }
+
+        const result = await clearCart(request.server, cart.id);
         reply.send({ 
             message: `Removed ${result.count} items from cart`,
             removedItems: result.count

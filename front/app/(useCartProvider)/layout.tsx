@@ -1,7 +1,7 @@
 'use client';
 import { CartProvider } from "@/context/CartContext";
 
-export default function LoginLayout({
+export default function WithCartProviderLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

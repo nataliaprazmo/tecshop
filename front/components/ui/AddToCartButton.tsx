@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { ChevronDown, ChevronUp, ShoppingCart } from 'react-feather';
-import { Button } from './Button';
 import { useCart } from '@/context/CartContext';
 import { ProductDetailsProps } from '@/types';
 
@@ -12,25 +11,29 @@ interface AddToCartButtonProps {
 
 export function AddToCartButton({ product }: AddToCartButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
-  const {addItem} = useCart();
+  const {addItem} = useCart(); 
+  const [quantity, setQuantity] = useState(1);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     const cartItem = {
-      id: `temp-${Date.now()}-${product.id}`,
+      id: product.id,
       productId: product.id,
       name: product.name,
       description: product.description,
       price: product.isDiscounted ? product.price * (1 - product.discountPercent / 100) : product.price,
-      quantity,
-      imageUrl: product.imagePath,
+      imagePath: product.imagePath,
+      isDiscounted: product.isDiscounted,
+      discountPercent: product.discountPercent,
+      quantity: quantity,
     };
     addItem(cartItem);
 
     console.log(`Adding product ${product.id} to cart with quantity ${quantity}`);
+    setQuantity(1);
+    setIsHovered(false);
   };
 
-  const [quantity, setQuantity] = useState(1);
   const incrementQuantity = () => {
     setQuantity((prevQuantity) => Math.min(prevQuantity + 1, 9)); // Limit to max 9
   };

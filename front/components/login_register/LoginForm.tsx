@@ -196,10 +196,10 @@ import { AuthFormProps, LoginProps } from "@/types";
 import { useState } from "react";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { submitLoginForm } from "@/utils/authSubmit";
-import { useSyncCartAfterLogin } from "@/context/CartContext";
 import LoginFormFields from "./LoginFormFields";
 import FormSubmitSection from "./FormSubmitSection";
 import { useRouter } from "next/navigation";
+import { useCart } from "@/context/CartContext";
 
 const initialFormData: LoginProps = {
   email: '',
@@ -207,9 +207,9 @@ const initialFormData: LoginProps = {
 };
 
 const LoginForm: React.FC<AuthFormProps> = ({ changeForm }) => {
-  const syncCart = useSyncCartAfterLogin();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const router = useRouter();
+  const { syncCartWithDatabase } = useCart();
   
   const {
     formData,
@@ -241,10 +241,16 @@ const LoginForm: React.FC<AuthFormProps> = ({ changeForm }) => {
         const responseData = await submitLoginForm(formData);
         
         console.log('Login successful:', responseData);
+        window.dispatchEvent(new Event("authChange"));
         
         // Sync the guest cart with the user's server cart if login was successful
         if (responseData.userId) {
-          await syncCart(responseData.userId);
+          try {
+            await syncCartWithDatabase();
+            console.log('Cart synchronized successfully');
+          } catch (syncError) {
+            console.error('Error synchronizing cart:', syncError);
+          }
         }
         
         router.push("/products");

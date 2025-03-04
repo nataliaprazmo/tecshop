@@ -86,3 +86,37 @@ export interface ProductDetailsProps {
   screenSize?: string;
   connectivity?: string;
 }
+
+export interface ProductWithoutDetailsProps {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  imagePath: string;
+  isDiscounted: boolean;
+  discountPercent: number;
+}
+
+export interface CartItem {
+  id: number;
+  productId: number;
+  quantity: number;
+  product: ProductWithoutDetailsProps;
+}
+
+export interface CartItemToAddProps {
+  productId: number;
+  quantity: number;
+}
+
+export interface CartContextProps {
+  items: CartItem[];
+  totalItems: number;
+  totalPrice: number;
+  setItems: React.Dispatch<React.SetStateAction<CartItem[]>>;
+  addItem: (item: CartItem) => void;
+  removeItem: (id: number) => void;
+  clearCart: () => void;
+  updateQuantity: (id: number, quantity: number) => void;
+  syncCartWithDatabase: () => Promise<void>;
+}

@@ -26,7 +26,6 @@ const Products:React.FC<Params> = ({categoryId}) => {
             );
             if (response.status === 200) {
               const res = await response.json();
-              console.log(res);
               setProducts(res);
             }
           } catch (error) {

@@ -19,7 +19,7 @@ export const submitRegisterForm = async (formData: {
     const data = await response.json();
     
     if (!response.ok) {
-      throw new Error(data.message || 'Rejestracja nie powiodła się');
+      return new Error(data.message || 'Rejestracja nie powiodła się');
     }
     
     return data;
@@ -35,6 +35,7 @@ export const submitRegisterForm = async (formData: {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: "include",
       body: JSON.stringify({
         email: formData.email,
         password: formData.password
@@ -49,11 +50,11 @@ export const submitRegisterForm = async (formData: {
         field: data.message.includes("email") ? "email" : "password",
         message: data.message
       };
-      throw errorInfo;
+      return errorInfo;
     }
     
     if (!response.ok) {
-      throw new Error(data.message || 'Logowanie nie powiodło się');
+      return new Error(data.message || 'Logowanie nie powiodło się');
     }
     
     return data;

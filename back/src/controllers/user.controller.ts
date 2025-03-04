@@ -82,7 +82,7 @@ export async function loginUser(
 
 export async function logoutUser(request: FastifyRequest, reply: FastifyReply) {
 	try {
-		reply
+		return reply
 			.clearCookie("token", {
 				httpOnly: true,
 				secure: process.env.NODE_ENV === "production",
@@ -94,6 +94,27 @@ export async function logoutUser(request: FastifyRequest, reply: FastifyReply) {
 		reply.status(500).send({ message: "Error logging out", error });
 	}
 }
+
+export async function isUserAuthenticated(
+	request: FastifyRequest,
+	reply: FastifyReply
+  ) {
+	try {
+	  const token = request.cookies.token;
+	  if (!token) {
+		return reply.status(401).send({ authenticated: false });
+	  }
+  
+	  try {
+		const decoded = request.server.jwt.verify(token);
+		return reply.send({ authenticated: true, user: decoded });
+	  } catch (error) {
+		return reply.status(401).send({ authenticated: false, message: "Invalid token" });
+	  }
+	} catch (error) {
+	  return reply.status(500).send({ authenticated: false, message: "Error checking authentication", error });
+	}
+  }
 
 export async function deleteUserHandler(request: FastifyRequest<{ Params: Params }>, reply: FastifyReply) {
     try {

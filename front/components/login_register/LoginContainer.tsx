@@ -12,7 +12,7 @@ const LoginContainer:React.FC = ()=>{
     }
 
     return <div className="my-8 grid grid-cols-2 border-2 rounded-2xl border-gray-200 shadow-sm">
-    <Image src="/images/login.png" alt="Login image" width={600} height={500} className="object-contain"/>
+    <Image src="/images/login.png" alt="Login image" width={600} height={500} className="object-contain h-auto"/>
     {login ? <LoginForm changeForm={changeForm}/> : <RegisterForm changeForm={changeForm}/>}
 </div>
 }
