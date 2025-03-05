@@ -3,10 +3,13 @@ import { ProductDetailsProps } from "@/types";
 import { useState, useEffect } from "react";
 import { Button } from "../ui/Button";
 import DetailsAccordion from "./DetailsAccordion";
+import { useCart } from "@/context/CartContext";
 
 const ProductInfo:React.FC<ProductDetailsProps> = ({
+    id,
     name,
     price,
+    imagePath,
     description,
     details,
     categoryId,
@@ -22,19 +25,39 @@ const ProductInfo:React.FC<ProductDetailsProps> = ({
     connectivity
   }) => {
     const finalPrice = isDiscounted && discountPercent ? price * (1 - discountPercent / 100) : price;
-    const [quantity, setQuantity] = useState(1);
     const [activeAccordion, setActiveAccordion] = useState<number | null>(0);
     const [categoryName, setCategoryName] = useState("produkt");
+    const {addItem} = useCart(); 
+      const [quantity, setQuantity] = useState(1);
+    
+      const handleAddToCart = (e: React.MouseEvent) => {
+        e.preventDefault();
+        const cartItem = {
+          id: id,
+          productId: id,
+          quantity: quantity,
+          product: {
+            id: id,
+            name: name,
+            description: description,
+            price: isDiscounted ? price * (1 - discountPercent / 100) : price,
+            imagePath: imagePath,
+            isDiscounted: isDiscounted,
+            discountPercent: discountPercent,
+          }
+        };
+        addItem(cartItem);
+    
+        console.log(`Adding product ${id} to cart with quantity ${quantity}`);
+        setQuantity(1);
+      };
   
     const incrementQuantity = () => {
-      setQuantity(prev => prev + 1);
+      setQuantity((prevQuantity) => Math.min(prevQuantity + 1, 9)); // Limit to max 9
     };
-  
     const decrementQuantity = () => {
-      if (quantity > 1) {
-        setQuantity(prev => prev - 1);
-      }
-    };
+      setQuantity((prevQuantity) => Math.max(prevQuantity - 1, 1)); // Limit to min 1
+    }
   
     const toggleAccordion = (index: number) => {
       setActiveAccordion(activeAccordion === index ? null : index);
@@ -125,7 +148,7 @@ const ProductInfo:React.FC<ProductDetailsProps> = ({
                   +
                 </button>
               </div>
-              <Button>
+              <Button onClick={handleAddToCart}>
                 Dodaj do koszyka
               </Button>
             </div>

@@ -1,89 +1,90 @@
 import { CartContextProps, CartItem } from "@/types";
-import { addItemToDatabase, checkAuthStatus, clearCartInDatabase, removeItemFromDatabase, syncCartWithDatabase, updateItemQuantityInDatabase } from "@/utils/cartApi";
-import { createContext, useContext, useEffect, useState } from "react";
+import { addItemToDatabase, checkAuthStatus, clearCartInDatabase, removeItemFromDatabase, updateItemQuantityInDatabase } from "@/utils/cartApi";
+import { syncCartWithDatabase } from "@/utils/syncCartApi";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 const CartContext = createContext<CartContextProps | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [items, setItems] = useState<CartItem[]>([]);
 
-  const locatStorageintoItems = () => {
+  const syncLocalStorage = useCallback((newItems: CartItem[]) => {
+    localStorage.setItem("cart", JSON.stringify(newItems));
+  }, []);
+
+  useEffect(() => {
     const storedCart = localStorage.getItem("cart");
     if (storedCart) {
       setItems(JSON.parse(storedCart));
     }
-  }
-
-  useEffect(() => {
-    locatStorageintoItems();
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(items));
-  }, [items]);
+    syncLocalStorage(items);
+  }, [items, syncLocalStorage]);
 
-  const syncCart = async () => {
-    await syncCartWithDatabase();
-  };
-
-  const addItem = async (item: CartItem) => {
+  const performCartSync = useCallback(async () => {
     const isAuthenticated = await checkAuthStatus();
     if (isAuthenticated) {
+      await syncCartWithDatabase();
+    }
+  }, []);
+
+  const addItem = useCallback(async (item: CartItem) => {
+    const isAuthenticated = await checkAuthStatus();
+
+    if (isAuthenticated) {
       await addItemToDatabase({
-        productId: item.id, 
+        productId: item.id,
         quantity: item.quantity
       });
-      await syncCart();
-      locatStorageintoItems();
-    } else {
+    } 
+    
       setItems((prev) => {
-        const existingItem = prev.find((cartItem) => cartItem.id === item.id);
+        const existingItem = prev.find((cartItem) => cartItem.productId === item.productId);
         if (existingItem) {
           return prev.map((cartItem) =>
-            cartItem.id === item.id
-              ? { ...cartItem, quantity: cartItem.quantity + existingItem.quantity }
+            cartItem.productId === item.productId
+              ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
               : cartItem
           );
         }
         return [...prev, { ...item, quantity: item.quantity }];
       });
-    }
-  };
+  }, []);
 
-  const removeItem = async (id: number) => {
+  const removeItem = useCallback(async (id: number) => {
     const isAuthenticated = await checkAuthStatus();
+
     if (isAuthenticated) {
       await removeItemFromDatabase(id);
-      await syncCart();
-      locatStorageintoItems();
-    } else {
+    } 
+    
       setItems((prev) => prev.filter((item) => item.id !== id));
-    }
-  };
+  }, []);
 
-  const clearCart = async () => {
+  const clearCart = useCallback(async () => {
     const isAuthenticated = await checkAuthStatus();
+
     if (isAuthenticated) {
       await clearCartInDatabase();
-      await syncCart();
-      locatStorageintoItems();
-    } else {
-      setItems([]);
     }
-  };
+    
+      setItems([]);
+  }, []);
 
-  const updateQuantity = async (id: number, quantity: number) => {
+  const updateQuantity = useCallback(async (id: number, quantity: number) => {
     const isAuthenticated = await checkAuthStatus();
+
     if (isAuthenticated) {
       await updateItemQuantityInDatabase(id, quantity);
-      await syncCart();
-      locatStorageintoItems();
-    } else {
+    }
+    
       setItems((prev) =>
         prev.map((item) => (item.id === id ? { ...item, quantity } : item))
       );
-    }
-  };
+      
+  }, []);
 
   const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
   const totalPrice = items.reduce(
@@ -93,17 +94,17 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <CartContext.Provider
-      value={{ 
-        items, 
-        totalItems, 
-        totalPrice, 
-        setItems,
-        addItem, 
-        removeItem, 
-        clearCart, 
-        updateQuantity, 
-        syncCartWithDatabase: syncCart 
-      }}
+    value={{
+      items,
+      totalItems,
+      totalPrice,
+      setItems,
+      addItem,
+      removeItem,
+      clearCart,
+      updateQuantity,
+      syncCartWithDatabase: performCartSync
+    }}
     >
       {children}
     </CartContext.Provider>

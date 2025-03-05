@@ -114,9 +114,9 @@ export interface CartContextProps {
   totalItems: number;
   totalPrice: number;
   setItems: React.Dispatch<React.SetStateAction<CartItem[]>>;
-  addItem: (item: CartItem) => void;
-  removeItem: (id: number) => void;
-  clearCart: () => void;
-  updateQuantity: (id: number, quantity: number) => void;
+  addItem: (item: CartItem) => Promise<void>;
+  removeItem: (id: number) => Promise<void>;
+  clearCart: () => Promise<void>;
+  updateQuantity: (id: number, quantity: number) => Promise<void>;
   syncCartWithDatabase: () => Promise<void>;
 }

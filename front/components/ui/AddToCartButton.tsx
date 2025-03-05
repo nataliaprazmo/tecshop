@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, ShoppingCart } from 'react-feather';
+import { Check, ChevronDown, ChevronUp, ShoppingCart } from 'react-feather';
 import { useCart } from '@/context/CartContext';
 import { ProductDetailsProps } from '@/types';
 
@@ -11,27 +11,42 @@ interface AddToCartButtonProps {
 
 export function AddToCartButton({ product }: AddToCartButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const {addItem} = useCart(); 
   const [quantity, setQuantity] = useState(1);
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
+    if (isLoading) return;
+    setIsLoading(true);
     const cartItem = {
       id: product.id,
       productId: product.id,
-      name: product.name,
-      description: product.description,
-      price: product.isDiscounted ? product.price * (1 - product.discountPercent / 100) : product.price,
-      imagePath: product.imagePath,
-      isDiscounted: product.isDiscounted,
-      discountPercent: product.discountPercent,
       quantity: quantity,
+      product: {
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        price: product.isDiscounted ? product.price * (1 - product.discountPercent / 100) : product.price,
+        imagePath: product.imagePath,
+        isDiscounted: product.isDiscounted,
+        discountPercent: product.discountPercent,
+      }
     };
-    addItem(cartItem);
-
-    console.log(`Adding product ${product.id} to cart with quantity ${quantity}`);
-    setQuantity(1);
-    setIsHovered(false);
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+     
+      await addItem(cartItem);
+      console.log(`Adding product ${product.id} to cart with quantity ${quantity}`);
+      
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    } catch (error) {
+      console.error('Failed to add item to cart', error);
+    } finally {
+      setQuantity(1);
+      setIsHovered(false);
+      setIsLoading(false);
+    }
   };
 
   const incrementQuantity = () => {
@@ -39,6 +54,15 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
   };
   const decrementQuantity = () => {
     setQuantity((prevQuantity) => Math.max(prevQuantity - 1, 1)); // Limit to min 1
+  }
+
+  if (isLoading) {
+    return (
+      <div className="relative transition-all px-6 w-46 h-10 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-bold flex gap-2 items-center justify-center">
+        Dodano
+        <Check className="mr-2" size={20} />
+      </div>
+    );
   }
 
   return (
