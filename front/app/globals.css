@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #1e1e1e;
+	--background: #ffffff;
+	--foreground: #1e1e1e;
 }
 /* 
 html {
@@ -10,16 +10,15 @@ html {
 } */
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: 'Open Sans', sans-serif;
+	color: var(--foreground);
+	background: var(--background);
+	font-family: "Open Sans", sans-serif;
 }
 
 @theme {
-  --color-primary: #1E3FE4;
-  --color-secondary: #7A15D3;
-  --shadow-base: 0 1px 3px 0 rgb(0 0 0 / 0.25);
-  --breakpoint-3xl: 102rem;
-  --spacing-46: 11.75rem;
+	--color-primary: #1e3fe4;
+	--color-secondary: #7a15d3;
+	--shadow-base: 0 1px 3px 0 rgb(0 0 0 / 0.25);
+	--breakpoint-3xl: 102rem;
+	--spacing-46: 11.75rem;
 }
-

@@ -1,34 +1,49 @@
-import Link from 'next/link';
-import SearchInput from '../ui/SearchInput';
-import {ShoppingCart, ChevronDown} from "react-feather";
-import { Button } from '../ui/Button';
-import LoginHandler from './LoginHandler';
+import Link from "next/link";
+import SearchInput from "../ui/SearchInput";
+import { ShoppingCart, ChevronDown } from "react-feather";
+import { Button } from "../ui/Button";
+import LoginHandler from "./LoginHandler";
 
 const Header: React.FC = () => {
-    return <header className='w-screen overflow-hidden flex items-center justify-between px-20 py-8 shadow'>
-        <Link href="/" className="text-3xl 2xl:text-4xl font-bold hover:font-extrabold transition-all min-w-36 2xl:min-w-[164px]">
-            TecSklep
-          </Link>
-          <div>
-            <Link href="/" className='text-base 2xl:text-xl mr-4 2xl:mr-6 hover:font-bold transition-all'>Strona główna</Link>
-            <Link href="/products" className='text-base 2xl:text-xl hover:font-bold transition-all'>Produkty</Link>
-          </div>
-          <div className='flex items-center gap-8 2xl:gap-10'>
-            <SearchInput />
-            <LoginHandler/>
-          <Link 
-            href="/cart" 
-            className="flex items-center font-semibold bg-gradient-to-r hover:scale-110 hover:bg-gradient-to-l from-primary to-secondary text-transparent bg-clip-text transition-all text-base 2xl:text-xl"
-          >
-            <ShoppingCart className='text-primary'/>
-            <span className="ml-2 2xl:ml-3">Koszyk</span>
-          </Link>
-          <div className="flex items-center">
-            <span className="text-sm">PLN</span>
-            <ChevronDown/>
-          </div>
-          </div>
-    </header>
-}
+	return (
+		<header className="w-screen overflow-hidden flex items-center justify-between px-20 py-8 shadow">
+			<Link
+				href="/"
+				className="text-3xl 2xl:text-4xl font-bold hover:font-extrabold transition-all min-w-36 2xl:min-w-[164px]"
+			>
+				TecSklep
+			</Link>
+			<div>
+				<Link
+					href="/"
+					className="text-base 2xl:text-xl mr-4 2xl:mr-6 hover:font-bold transition-all"
+				>
+					Strona główna
+				</Link>
+				<Link
+					href="/products"
+					className="text-base 2xl:text-xl hover:font-bold transition-all"
+				>
+					Produkty
+				</Link>
+			</div>
+			<div className="flex items-center gap-8 2xl:gap-10">
+				<SearchInput />
+				<LoginHandler />
+				<Link
+					href="/cart"
+					className="flex items-center font-semibold bg-gradient-to-r hover:scale-110 hover:bg-gradient-to-l from-primary to-secondary text-transparent bg-clip-text transition-all text-base 2xl:text-xl"
+				>
+					<ShoppingCart className="text-primary" />
+					<span className="ml-2 2xl:ml-3">Koszyk</span>
+				</Link>
+				<div className="flex items-center">
+					<span className="text-sm">PLN</span>
+					<ChevronDown />
+				</div>
+			</div>
+		</header>
+	);
+};
 
 export default Header;

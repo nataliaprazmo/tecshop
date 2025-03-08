@@ -3,11 +3,11 @@ import Hero from "@/components/home/Hero";
 import Sales from "@/components/home/Sales";
 
 export default function Home() {
-  return (
-    <>
-    <Hero/>
-    <Sales/>
-    <Categories/>
-    </>
-  );
+	return (
+		<>
+			<Hero />
+			<Sales />
+			<Categories />
+		</>
+	);
 }

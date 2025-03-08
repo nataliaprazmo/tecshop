@@ -12,7 +12,7 @@ import cartRoutes from "./routes/cart.route";
 import auth from "./plugins/auth";
 
 const fastify = Fastify({
-	logger: true
+	logger: true,
 });
 
 // allow frontend

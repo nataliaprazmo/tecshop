@@ -1,12 +1,10 @@
-'use client';
+"use client";
 import { CartProvider } from "@/context/CartContext";
 
 export default function WithCartProviderLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return (
-    <CartProvider>{children}</CartProvider>
-  );
+	return <CartProvider>{children}</CartProvider>;
 }

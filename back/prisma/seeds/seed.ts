@@ -9,51 +9,55 @@ const prisma = new PrismaClient();
 async function seed() {
 	for (const name of categories) {
 		await prisma.category.create({
-            data: {name}
+			data: { name },
 		});
 	}
 	console.log("Kategorie dodane.");
 
-  // Dodanie użytkowników
-  for (const user of users) {
-    const newUser = await prisma.user.create({ data: user });
-    await prisma.cart.create({ data: { userId: newUser.id } });
-  }
-  console.log("Użytkownicy dodani.");
+	// Dodanie użytkowników
+	for (const user of users) {
+		const newUser = await prisma.user.create({ data: user });
+		await prisma.cart.create({ data: { userId: newUser.id } });
+	}
+	console.log("Użytkownicy dodani.");
 
-  // Dodanie produktów
-  const createdProducts = [];
-  for (const product of products) {
-    const category = await prisma.category.findUnique({ where: { id: product.categoryId } });
-    if (category) {
-      const discountPercent =
-        category.name === 'smartwatch' ? 10 :
-        category.name === 'słuchawki bezprzewodowe' ? 25 :
-        undefined;
+	// Dodanie produktów
+	const createdProducts = [];
+	for (const product of products) {
+		const category = await prisma.category.findUnique({
+			where: { id: product.categoryId },
+		});
+		if (category) {
+			const discountPercent =
+				category.name === "smartwatch"
+					? 10
+					: category.name === "słuchawki bezprzewodowe"
+					? 25
+					: undefined;
 
-      const newProduct = await prisma.product.create({
-        data: {
-          name: product.name,
-          description: product.description,
-          price: product.price,
-          imagePath: product.imagePath,
-          isDiscounted: discountPercent !== undefined,
-          discountPercent: discountPercent,
-          manufacturer: product.manufacturer,
-          model: product.model,
-		      details: product.details,
-          batteryLife: product.batteryLife,
-          connectivity: product.connectivity,
-          processor: product.processor,
-          operatingSystem: product.operatingSystem,
-          screenSize: product.screenSize,
-          categoryId: category.id,
-        },
-      });
-      createdProducts.push(newProduct);
-    }
-  }
-  console.log("Produkty dodane.");
+			const newProduct = await prisma.product.create({
+				data: {
+					name: product.name,
+					description: product.description,
+					price: product.price,
+					imagePath: product.imagePath,
+					isDiscounted: discountPercent !== undefined,
+					discountPercent: discountPercent,
+					manufacturer: product.manufacturer,
+					model: product.model,
+					details: product.details,
+					batteryLife: product.batteryLife,
+					connectivity: product.connectivity,
+					processor: product.processor,
+					operatingSystem: product.operatingSystem,
+					screenSize: product.screenSize,
+					categoryId: category.id,
+				},
+			});
+			createdProducts.push(newProduct);
+		}
+	}
+	console.log("Produkty dodane.");
 }
 
 seed()
