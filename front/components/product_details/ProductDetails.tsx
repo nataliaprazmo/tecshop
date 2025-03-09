@@ -5,6 +5,7 @@ import ProductInfo from "./ProductInfo";
 import { ProductDetailsProps } from "@/types";
 import { useEffect, useState } from "react";
 import { Frown, Loader } from "react-feather";
+import globalState from "@/lib/globalState";
 
 interface ProductDetailsComponentProps {
 	productId: string;
@@ -15,6 +16,7 @@ const ProductDetails: React.FC<ProductDetailsComponentProps> = ({
 }) => {
 	const [product, setProduct] = useState<ProductDetailsProps | null>(null);
 	const [loading, setLoading] = useState(true);
+	const microinteractionsOn = globalState.microinteractionsEnabled;
 
 	useEffect(() => {
 		const fetchProduct = async () => {
@@ -40,7 +42,7 @@ const ProductDetails: React.FC<ProductDetailsComponentProps> = ({
 		fetchProduct();
 	}, [productId]);
 
-	if (loading) {
+	if (microinteractionsOn && loading) {
 		return (
 			<div className="container px-20 py-16 text-2xl h-screen">
 				<div className="flex gap-4 items-center">
@@ -55,7 +57,7 @@ const ProductDetails: React.FC<ProductDetailsComponentProps> = ({
 		return (
 			<div className="container px-20 py-16 text-2xl h-screen">
 				<div className="flex gap-4 items-center">
-					<Frown />
+					{microinteractionsOn && <Frown />}
 					<p>Nie znaleziono produktu</p>
 				</div>
 			</div>

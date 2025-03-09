@@ -3,26 +3,33 @@ import SearchInput from "../ui/SearchInput";
 import { ShoppingCart, ChevronDown } from "react-feather";
 import { Button } from "../ui/Button";
 import LoginHandler from "./LoginHandler";
+import globalState from "@/lib/globalState";
 
 const Header: React.FC = () => {
+	const linkMicrointeractionsClasses = globalState.microinteractionsEnabled
+		? "hover:font-bold transition-all"
+		: "";
 	return (
 		<header className="w-screen overflow-hidden flex items-center justify-between px-20 py-8 shadow">
 			<Link
 				href="/"
-				className="text-3xl 2xl:text-4xl font-bold hover:font-extrabold transition-all min-w-36 2xl:min-w-[164px]"
+				className={`text-3xl 2xl:text-4xl font-bold min-w-36 2xl:min-w-[164px] ${
+					globalState.microinteractionsEnabled &&
+					"hover:font-extrabold transition-all"
+				}`}
 			>
 				TecSklep
 			</Link>
 			<div>
 				<Link
 					href="/"
-					className="text-base 2xl:text-xl mr-4 2xl:mr-6 hover:font-bold transition-all"
+					className={`text-base 2xl:text-xl mr-4 2xl:mr-6 ${linkMicrointeractionsClasses}`}
 				>
 					Strona główna
 				</Link>
 				<Link
 					href="/products"
-					className="text-base 2xl:text-xl hover:font-bold transition-all"
+					className={`text-base 2xl:text-xl ${linkMicrointeractionsClasses}`}
 				>
 					Produkty
 				</Link>
@@ -32,7 +39,10 @@ const Header: React.FC = () => {
 				<LoginHandler />
 				<Link
 					href="/cart"
-					className="flex items-center font-semibold bg-gradient-to-r hover:scale-110 hover:bg-gradient-to-l from-primary to-secondary text-transparent bg-clip-text transition-all text-base 2xl:text-xl"
+					className={`flex items-center font-semibold bg-gradient-to-r text-transparent bg-clip-text from-primary to-secondary ${
+						globalState.microinteractionsEnabled &&
+						"hover:scale-110 hover:bg-gradient-to-l transition-all"
+					} text-base 2xl:text-xl`}
 				>
 					<ShoppingCart className="text-primary" />
 					<span className="ml-2 2xl:ml-3">Koszyk</span>

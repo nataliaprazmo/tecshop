@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { Button } from "../ui/Button";
 import DetailsAccordion from "./DetailsAccordion";
 import { useCart } from "@/context/CartContext";
+import globalState from "@/lib/globalState";
+import Details from "./Details";
 
 const ProductInfo: React.FC<ProductDetailsProps> = ({
 	id,
@@ -160,17 +162,29 @@ const ProductInfo: React.FC<ProductDetailsProps> = ({
 					<Button onClick={handleAddToCart}>Dodaj do koszyka</Button>
 				</div>
 			</div>
-			<div className="border-t border-gray-200 w-full">
-				{accordionDetails.map((detail, index) => (
-					<DetailsAccordion
-						key={index}
-						title={detail.title}
-						content={detail.content}
-						isOpen={activeAccordion === index}
-						onClick={() => toggleAccordion(index)}
-					/>
-				))}
-			</div>
+			{globalState.microinteractionsEnabled ? (
+				<div className="border-t border-gray-200 w-full">
+					{accordionDetails.map((detail, index) => (
+						<DetailsAccordion
+							key={index}
+							title={detail.title}
+							content={detail.content}
+							isOpen={activeAccordion === index}
+							onClick={() => toggleAccordion(index)}
+						/>
+					))}
+				</div>
+			) : (
+				<div className="w-full mt-4">
+					{accordionDetails.map((detail, index) => (
+						<Details
+							key={index}
+							title={detail.title}
+							content={detail.content}
+						/>
+					))}
+				</div>
+			)}
 		</div>
 	);
 };

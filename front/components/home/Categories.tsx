@@ -1,5 +1,6 @@
 import { CategoryProps } from "@/types";
 import Link from "next/link";
+import globalState from "@/lib/globalState";
 
 const Categories: React.FC = () => {
 	const categories: CategoryProps[] = [
@@ -9,6 +10,9 @@ const Categories: React.FC = () => {
 		{ name: "Tablety", href: "/products/3" },
 		{ name: "Akcesoria", href: "/products/5" },
 	];
+	const microinteractionsClasses = globalState.microinteractionsEnabled
+		? "hover:bg-indigo-200 hover:scale-105 transition-all"
+		: "";
 
 	return (
 		<section className="mb-20 px-20">
@@ -21,7 +25,7 @@ const Categories: React.FC = () => {
 					<Link
 						key={category.name}
 						href={category.href}
-						className="bg-indigo-100 shadow border border-indigo-200 rounded-lg p-8 text-center hover:bg-indigo-200 hover:scale-105 transition-all"
+						className={`bg-indigo-100 shadow border border-indigo-200 rounded-lg p-8 text-center ${microinteractionsClasses}`}
 					>
 						<span className="font-bold text-lg 2xl:text-xl">
 							{category.name}

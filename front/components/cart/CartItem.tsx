@@ -6,6 +6,7 @@ import { ChevronDown, ChevronUp, Trash2 } from "react-feather";
 import { CartItem as CartItemType } from "@/types";
 import { useCart } from "@/context/CartContext";
 import Link from "next/link";
+import globalState from "@/lib/globalState";
 
 interface CartItemProp {
 	cartItem: CartItemType;
@@ -16,6 +17,7 @@ const CartItem: React.FC<CartItemProp> = ({ cartItem }) => {
 	const [quantity, setQuantity] = useState(cartItem.quantity);
 	const [isRemoving, setIsRemoving] = useState(false);
 	const product = cartItem.product;
+	const microinteractionsOn = globalState.microinteractionsEnabled;
 
 	useEffect(() => {
 		setQuantity(cartItem.quantity);
@@ -48,12 +50,15 @@ const CartItem: React.FC<CartItemProp> = ({ cartItem }) => {
 	return (
 		<div
 			className={`
-            p-1 flex items-start justify-between w-full hover:bg-indigo-50 hover:border border-indigo-200 rounded-lg hover:scale-105 
-            transition-all duration-300 
+            p-1 flex items-start justify-between w-full border-indigo-200 rounded-lg ${
+				microinteractionsOn &&
+				"hover:bg-indigo-50 hover:border hover:scale-105 transition-all duration-300 "
+			}
             ${
-				isRemoving
+				microinteractionsOn &&
+				(isRemoving
 					? "transform translate-x-full opacity-0 scale-75"
-					: "translate-x-0 opacity-100"
+					: "translate-x-0 opacity-100")
 			}
         `}
 		>
@@ -114,7 +119,9 @@ const CartItem: React.FC<CartItemProp> = ({ cartItem }) => {
 				</div>
 				<button
 					onClick={handleRemoveItem}
-					className="cursor-pointer text-gray-700 hover:bg-indigo-200 p-1 rounded-lg"
+					className={`cursor-pointer text-gray-700 ${
+						microinteractionsOn && "hover:bg-indigo-200"
+					} p-1 rounded-lg`}
 				>
 					<Trash2 size={32} strokeWidth={1.5} />
 				</button>

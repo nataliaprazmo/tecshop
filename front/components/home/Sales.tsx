@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "react-feather";
 import { SalesProps } from "@/types";
+import globalState from "@/lib/globalState";
 
 const Sales: React.FC = () => {
 	const promotions: SalesProps[] = [
@@ -42,7 +43,10 @@ const Sales: React.FC = () => {
 							</p>
 							<Link
 								href={promo.href}
-								className="inline-flex items-center gap-2 text-gray-700 hover:text-primary transition-colors"
+								className={`inline-flex items-center gap-2 text-gray-700 ${
+									globalState.microinteractionsEnabled &&
+									"hover:text-primary transition-colors"
+								}`}
 							>
 								<span>SPRAWDŹ</span>
 								<ArrowRight className="w-5 h-5" />

@@ -6,11 +6,13 @@ import { Loader, Trash2 } from "react-feather";
 import Link from "next/link";
 import { Button } from "../ui/Button";
 import { useState } from "react";
+import globalState from "@/lib/globalState";
 
 const Cart: React.FC = () => {
 	const { items, totalItems, totalPrice, clearCart } = useCart();
 	const [isClearing, setIsClearing] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const microinteractionsOn = globalState.microinteractionsEnabled;
 
 	const handleClearCart = () => {
 		if (window.confirm("Czy na pewno chcesz wyczyścić koszyk?")) {
@@ -28,7 +30,7 @@ const Cart: React.FC = () => {
 		}
 	};
 
-	if (isLoading) {
+	if (isLoading && microinteractionsOn) {
 		return (
 			<div className="w-full h-screen flex flex-col items-center justify-center">
 				<Loader className="animate-spin text-primary" size={64} />
@@ -67,7 +69,11 @@ const Cart: React.FC = () => {
 			className={`
                 w-full px-20 py-16 min-h-screen 
                 transition-all duration-500 
-                ${isClearing ? "opacity-0 scale-90" : "opacity-100 scale-100"}
+                ${
+					isClearing && microinteractionsOn
+						? "opacity-0 scale-90"
+						: "opacity-100 scale-100"
+				}
             `}
 		>
 			<div className="w-full max-w-7xl mx-auto">
@@ -80,7 +86,9 @@ const Cart: React.FC = () => {
 					</h1>
 					<button
 						onClick={handleClearCart}
-						className="flex items-center gap-2 font-bold text-primary hover:text-blue-800"
+						className={`flex items-center gap-2 font-bold text-primary ${
+							microinteractionsOn && "hover:text-indigo-800"
+						}`}
 						disabled={isClearing}
 					>
 						<span>Wyczyść koszyk</span>
@@ -92,10 +100,11 @@ const Cart: React.FC = () => {
 					className={`
                         bg-white rounded-lg shadow-lg p-8 border border-gray-100
                         transition-all duration-500 
-                        ${
-							isClearing
+						${
+							microinteractionsOn &&
+							(isClearing
 								? "opacity-0 translate-y-10"
-								: "opacity-100 translate-y-0"
+								: "opacity-100 translate-y-0")
 						}
                     `}
 				>
@@ -107,9 +116,10 @@ const Cart: React.FC = () => {
                                     pb-8 border-b border-gray-200 last:border-b-0
                                     transition-all duration-500
                                     ${
-										isClearing
+										microinteractionsOn &&
+										(isClearing
 											? "opacity-0 scale-90"
-											: "opacity-100 scale-100"
+											: "opacity-100 scale-100")
 									}
                                 `}
 							>
@@ -123,9 +133,10 @@ const Cart: React.FC = () => {
                             mt-10 flex justify-end items-center gap-4
                             transition-all duration-500
                             ${
-								isClearing
+								microinteractionsOn &&
+								(isClearing
 									? "opacity-0 translate-y-5"
-									: "opacity-100 translate-y-0"
+									: "opacity-100 translate-y-0")
 							}
                         `}
 					>
@@ -140,15 +151,19 @@ const Cart: React.FC = () => {
                             mt-8 flex justify-between
                             transition-all duration-500
                             ${
-								isClearing
+								microinteractionsOn &&
+								(isClearing
 									? "opacity-0 translate-y-5"
-									: "opacity-100 translate-y-0"
+									: "opacity-100 translate-y-0")
 							}
                         `}
 					>
 						<Link
 							href="/products"
-							className="relative text-xl rounded-xl font-bold transition-colors cursor-pointer bg-gradient-to-r from-primary to-secondary border-2 text-transparent bg-clip-text hover:from-secondary hover:to-primary"
+							className={`relative text-xl rounded-xl font-bold transition-colors cursor-pointer bg-gradient-to-r from-primary to-secondary border-2 text-transparent bg-clip-text ${
+								microinteractionsOn &&
+								"hover:from-secondary hover:to-primary"
+							}`}
 						>
 							Kontynuuj zakupy
 							<span className="absolute w-full h-0.5 bg-gradient-to-r from-primary to-secondary bottom-0.5 left-0 rounded-full"></span>

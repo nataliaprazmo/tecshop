@@ -4,6 +4,7 @@ import { ProductDetailsProps } from "@/types";
 import { useState, useEffect } from "react";
 import { Frown, Loader } from "react-feather";
 import ProductCard from "./ProductCard";
+import globalState from "@/lib/globalState";
 
 interface Params {
 	categoryId?: string;
@@ -14,6 +15,7 @@ const Products: React.FC<Params> = ({ categoryId }) => {
 		null
 	);
 	const [loading, setLoading] = useState(true);
+	const microinteractionsOn = globalState.microinteractionsEnabled;
 
 	useEffect(() => {
 		const route = categoryId
@@ -38,7 +40,7 @@ const Products: React.FC<Params> = ({ categoryId }) => {
 		fetchProduct();
 	}, []);
 
-	if (loading) {
+	if (loading && microinteractionsOn) {
 		return (
 			<div className="container px-20 py-16 text-2xl h-screen">
 				<div className="flex gap-4 items-center">
@@ -53,7 +55,7 @@ const Products: React.FC<Params> = ({ categoryId }) => {
 		return (
 			<div className="container px-20 py-16 text-2xl h-screen">
 				<div className="flex gap-4 items-center">
-					<Frown />
+					{microinteractionsOn && <Frown />}
 					<p>
 						Nie znaleziono produktów{" "}
 						{categoryId && "z danej kategorii"}

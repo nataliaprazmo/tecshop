@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Check, ChevronDown, ChevronUp, ShoppingCart } from "react-feather";
 import { useCart } from "@/context/CartContext";
 import { ProductDetailsProps } from "@/types";
+import globalState from "@/lib/globalState";
 
 interface AddToCartButtonProps {
 	product: ProductDetailsProps;
@@ -14,6 +15,7 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
 	const [isLoading, setIsLoading] = useState(false);
 	const { addItem } = useCart();
 	const [quantity, setQuantity] = useState(1);
+	const microinteractionsOn = globalState.microinteractionsEnabled;
 
 	const handleAddToCart = async (e: React.MouseEvent) => {
 		e.preventDefault();
@@ -60,7 +62,7 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
 		setQuantity((prevQuantity) => Math.max(prevQuantity - 1, 1)); // Limit to min 1
 	};
 
-	if (isLoading) {
+	if (isLoading && microinteractionsOn) {
 		return (
 			<div className="relative transition-all px-6 w-46 h-10 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-bold flex gap-2 items-center justify-center">
 				Dodano
@@ -75,42 +77,52 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
 			onMouseEnter={() => setIsHovered(true)}
 			onMouseLeave={() => setIsHovered(false)}
 		>
-			{!isHovered ? (
-				<>Dodaj do koszyka</>
-			) : (
-				<div className="flex items-center justify-between w-full">
-					<div className="flex">
-						<input
-							type="text"
-							value={quantity}
-							readOnly
-							className="w-4"
-						/>
-						<div className="flex flex-col">
-							<span className="cursor-pointer -mb-1.5 bg-transparent w-2 aspect-square">
-								<ChevronUp
-									onClick={incrementQuantity}
-									size={16}
-								/>
-							</span>
-							<span className="cursor-pointer hover:stroke-3 bg-transparent w-2 aspect-square">
-								<ChevronDown
-									onClick={decrementQuantity}
-									size={16}
-								/>
-							</span>
+			{microinteractionsOn ? (
+				!isHovered ? (
+					<>Dodaj do koszyka</>
+				) : (
+					<div className="flex items-center justify-between w-full">
+						<div className="flex">
+							<input
+								type="text"
+								value={quantity}
+								readOnly
+								className="w-4"
+							/>
+							<div className="flex flex-col">
+								<span className="cursor-pointer -mb-1.5 bg-transparent w-2 aspect-square">
+									<ChevronUp
+										onClick={incrementQuantity}
+										size={16}
+									/>
+								</span>
+								<span className="cursor-pointer hover:stroke-3 bg-transparent w-2 aspect-square">
+									<ChevronDown
+										onClick={decrementQuantity}
+										size={16}
+									/>
+								</span>
+							</div>
 						</div>
+						<div className="w-0.5 h-10 rounded-full ml-3 mr-2 bg-white relative"></div>
+						<div className="flex items-center gap-2">
+							<p>Dodaj</p>
+							<ShoppingCart size={20} />
+						</div>
+						<button
+							onClick={handleAddToCart}
+							className="absolute right-0 h-10 w-30 cursor-pointer"
+						></button>
 					</div>
-					<div className="w-0.5 h-10 rounded-full ml-3 mr-2 bg-white relative"></div>
-					<div className="flex items-center gap-2">
-						<p>Dodaj</p>
-						<ShoppingCart size={20} />
-					</div>
+				)
+			) : (
+				<>
+					Dodaj do koszyka
 					<button
 						onClick={handleAddToCart}
 						className="absolute right-0 h-10 w-30 cursor-pointer"
 					></button>
-				</div>
+				</>
 			)}
 		</div>
 	);
