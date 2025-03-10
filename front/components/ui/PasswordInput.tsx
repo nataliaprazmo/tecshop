@@ -41,7 +41,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
 					<button
 						type="button"
 						onClick={toggleShowPassword}
-						className="text-slate-400 focus:outline-none"
+						className="text-slate-400 focus:outline-none cursor-pointer"
 					>
 						{microinteractionsOn &&
 							(showPassword ? (

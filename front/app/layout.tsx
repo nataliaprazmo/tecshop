@@ -3,6 +3,7 @@ import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 const openSans = Open_Sans({
 	variable: "--font-open-sans",
@@ -26,7 +27,10 @@ export default function RootLayout({
 				className={`${openSans.variable} antialiased overflow-x-hidden`}
 			>
 				<Header />
-				<main>{children}</main>
+				<main>
+					<Breadcrumbs />
+					{children}
+				</main>
 				<Footer />
 			</body>
 		</html>

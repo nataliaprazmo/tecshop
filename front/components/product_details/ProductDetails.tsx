@@ -44,7 +44,7 @@ const ProductDetails: React.FC<ProductDetailsComponentProps> = ({
 
 	if (microinteractionsOn && loading) {
 		return (
-			<div className="container px-20 py-16 text-2xl h-screen">
+			<div className="container px-20 py-8 text-2xl h-screen">
 				<div className="flex gap-4 items-center">
 					<Loader className="animate-spin" />
 					<p>Ładuję produkt...</p>
@@ -55,7 +55,7 @@ const ProductDetails: React.FC<ProductDetailsComponentProps> = ({
 
 	if (!product) {
 		return (
-			<div className="container px-20 py-16 text-2xl h-screen">
+			<div className="container px-20 py-8 text-2xl h-screen">
 				<div className="flex gap-4 items-center">
 					{microinteractionsOn && <Frown />}
 					<p>Nie znaleziono produktu</p>
@@ -64,14 +64,14 @@ const ProductDetails: React.FC<ProductDetailsComponentProps> = ({
 		);
 	}
 	return (
-		<div className="px-20 py-16 grid grid-cols-2 gap-8 items-center">
+		<div className="px-20 py-6 grid grid-cols-2 gap-8 items-center">
 			<div>
 				<Image
 					src={product.imagePath}
 					alt={product.name}
 					width={600}
 					height={600}
-					className="object-cover"
+					className="w-full h-full object-cover rounded-2xl"
 				/>
 			</div>
 			<ProductInfo {...product} />

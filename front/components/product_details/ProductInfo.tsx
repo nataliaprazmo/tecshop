@@ -6,6 +6,7 @@ import DetailsAccordion from "./DetailsAccordion";
 import { useCart } from "@/context/CartContext";
 import globalState from "@/lib/globalState";
 import Details from "./Details";
+import AddedCheckmark from "../ui/AddedCheckmark";
 
 const ProductInfo: React.FC<ProductDetailsProps> = ({
 	id,
@@ -28,15 +29,18 @@ const ProductInfo: React.FC<ProductDetailsProps> = ({
 }) => {
 	const finalPrice =
 		isDiscounted && discountPercent
-			? price * (1 - discountPercent / 100)
+			? (price * (1 - discountPercent / 100)).toFixed(2)
 			: price;
 	const [activeAccordion, setActiveAccordion] = useState<number | null>(0);
 	const [categoryName, setCategoryName] = useState("produkt");
 	const { addItem } = useCart();
+	const [isLoading, setIsLoading] = useState(false);
 	const [quantity, setQuantity] = useState(1);
 
-	const handleAddToCart = (e: React.MouseEvent) => {
+	const handleAddToCart = async (e: React.MouseEvent) => {
 		e.preventDefault();
+		if (isLoading) return;
+		setIsLoading(true);
 		const cartItem = {
 			id: id,
 			productId: id,
@@ -53,10 +57,21 @@ const ProductInfo: React.FC<ProductDetailsProps> = ({
 				discountPercent: discountPercent,
 			},
 		};
-		addItem(cartItem);
+		try {
+			await new Promise((resolve) => setTimeout(resolve, 1000));
 
-		console.log(`Adding product ${id} to cart with quantity ${quantity}`);
-		setQuantity(1);
+			await addItem(cartItem);
+			console.log(
+				`Adding product ${id} to cart with quantity ${quantity}`
+			);
+
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+		} catch (error) {
+			console.error("Failed to add item to cart", error);
+		} finally {
+			setQuantity(1);
+			setIsLoading(false);
+		}
 	};
 
 	const incrementQuantity = () => {
@@ -72,24 +87,24 @@ const ProductInfo: React.FC<ProductDetailsProps> = ({
 
 	const accordionDetails = [
 		{
-			title: "Product Details",
+			title: "Szczegóły produktu",
 			content: details,
 		},
 		{
 			title: "Producent",
 			content: `
-            Manufacturer: ${manufacturer}\nModel: ${model}
+            Producent: ${manufacturer}\nModel: ${model}
           `,
 		},
 		{
-			title: "Technical Specifications",
+			title: "Specyfikacje techniczne",
 			content: [
-				processor && `Processor: ${processor}`,
-				graphicsCard && `Graphics Card: ${graphicsCard}`,
-				operatingSystem && `Operating System: ${operatingSystem}`,
-				batteryLife && `Battery Life: ${batteryLife}`,
-				screenSize && `Screen Size: ${screenSize}`,
-				connectivity && `Connectivity: ${connectivity}`,
+				processor && `Procesor: ${processor}`,
+				graphicsCard && `Karta graficzna: ${graphicsCard}`,
+				operatingSystem && `System operacyjny: ${operatingSystem}`,
+				batteryLife && `Czas pracy baterii: ${batteryLife}`,
+				screenSize && `Rozmiar ekranu: ${screenSize}`,
+				connectivity && `Łączność: ${connectivity}`,
 			]
 				.filter(Boolean)
 				.join("\n"),
@@ -120,14 +135,22 @@ const ProductInfo: React.FC<ProductDetailsProps> = ({
 		<div className="flex flex-col justify-between items-start h-full">
 			<div className="w-full">
 				<div className="flex justify-between items-start mb-2">
-					<h1 className="text-3xl font-bold text-gray-900">{name}</h1>
+					<h1 className="text-3xl font-bold text-gray-900">
+						{name}
+						{isDiscounted &&
+							globalState.microinteractionsEnabled && (
+								<span className="text-base text-red-600 uppercase align-middle ml-3 px-2 py-0.5 border border-red-300 bg-red-50 rounded-sm">
+									-{discountPercent}%
+								</span>
+							)}
+					</h1>
 					<p className="text-3xl font-bold text-primary">
 						{isDiscounted ? (
 							<>
 								<span className="line-through text-gray-400 font-normal text-sm -mb-1">
 									{price}zł
 								</span>{" "}
-								{finalPrice.toFixed(2)}zł
+								{finalPrice}zł
 							</>
 						) : (
 							`${price}zł`
@@ -159,7 +182,13 @@ const ProductInfo: React.FC<ProductDetailsProps> = ({
 							+
 						</button>
 					</div>
-					<Button onClick={handleAddToCart}>Dodaj do koszyka</Button>
+					{isLoading && globalState.microinteractionsEnabled ? (
+						<AddedCheckmark />
+					) : (
+						<Button onClick={handleAddToCart}>
+							Dodaj do koszyka
+						</Button>
+					)}
 				</div>
 			</div>
 			{globalState.microinteractionsEnabled ? (

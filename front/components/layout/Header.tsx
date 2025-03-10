@@ -1,7 +1,6 @@
 import Link from "next/link";
 import SearchInput from "../ui/SearchInput";
 import { ShoppingCart, ChevronDown } from "react-feather";
-import { Button } from "../ui/Button";
 import LoginHandler from "./LoginHandler";
 import globalState from "@/lib/globalState";
 
@@ -47,10 +46,10 @@ const Header: React.FC = () => {
 					<ShoppingCart className="text-primary" />
 					<span className="ml-2 2xl:ml-3">Koszyk</span>
 				</Link>
-				<div className="flex items-center">
+				{/* <div className="flex items-center">
 					<span className="text-sm">PLN</span>
 					<ChevronDown />
-				</div>
+				</div> */}
 			</div>
 		</header>
 	);

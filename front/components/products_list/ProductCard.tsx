@@ -11,28 +11,32 @@ interface ProductParam {
 const ProductCard: React.FC<ProductParam> = ({ product }) => {
 	const discountedPrice =
 		product.isDiscounted && product.discountPercent
-			? product.price * (1 - product.discountPercent / 100)
+			? (product.price * (1 - product.discountPercent / 100)).toFixed(2)
 			: product.price;
 	return (
-		<div className="w-full h-fit flex flex-col items-start justify-between">
+		<div
+			className={`w-full h-fit flex flex-col items-start justify-between ${
+				globalState.microinteractionsEnabled &&
+				"p-1 hover:scale-105 hover:bg-indigo-100 hover:border hover:border-indigo-200 transition-all hover:rounded-2xl"
+			}`}
+		>
 			<Link href={`/products/details/${product.id}`} className="relative">
 				<Image
 					src={product.imagePath}
 					alt={product.name}
 					width={400}
-					height={400}
-					className={`object-contain border border-gray-200 rounded-2xl shadow-sm ${
-						globalState.microinteractionsEnabled &&
-						"hover:brightness-50 hover:scale-105 transition-all"
-					}`}
+					height={300}
+					className="aspect-[4/3] object-cover border border-gray-200 rounded-2xl shadow-sm"
 				/>
-				{product.isDiscounted &&
-					globalState.microinteractionsEnabled && (
-						<span className="absolute rounded-full p-2 aspect-square text-center content-center border border-gray-200 shadow-sm bg-white font-bold text-primary right-4 top-4">
-							-{product.discountPercent}%
-						</span>
-					)}
-				<h3 className="mt-3 font-bold text-2xl">{product.name}</h3>
+				<h3 className="mt-3 font-bold text-2xl">
+					{product.name}
+					{product.isDiscounted &&
+						globalState.microinteractionsEnabled && (
+							<span className="text-sm text-red-600 uppercase align-middle ml-2 px-2 py-0.5 border border-red-300 bg-red-50 rounded-sm">
+								-{product.discountPercent}%
+							</span>
+						)}
+				</h3>
 				<p className="text-base text-gray-700 mt-2 line-clamp-2 h-16">
 					{product.description}
 				</p>
@@ -44,7 +48,7 @@ const ProductCard: React.FC<ProductParam> = ({ product }) => {
 							<span className="line-through text-gray-400 font-normal text-sm -mb-1">
 								{product.price}zł
 							</span>{" "}
-							{discountedPrice.toFixed(2)}zł
+							{discountedPrice}zł
 						</>
 					) : (
 						`${product.price}zł`

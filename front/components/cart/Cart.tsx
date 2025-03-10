@@ -7,27 +7,42 @@ import Link from "next/link";
 import { Button } from "../ui/Button";
 import { useState } from "react";
 import globalState from "@/lib/globalState";
+import ClearCartModal from "./ClearCartModal";
 
 const Cart: React.FC = () => {
 	const { items, totalItems, totalPrice, clearCart } = useCart();
 	const [isClearing, setIsClearing] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	const microinteractionsOn = globalState.microinteractionsEnabled;
 
-	const handleClearCart = () => {
-		if (window.confirm("Czy na pewno chcesz wyczyścić koszyk?")) {
-			setIsClearing(true);
-			setTimeout(() => {
-				clearCart();
-				setIsClearing(false);
-				setIsLoading(true);
+	const clearCartActions = () => {
+		setIsClearing(true);
+		setTimeout(() => {
+			clearCart();
+			setIsClearing(false);
+			setIsLoading(true);
 
-				// Simulate network delay
-				setTimeout(() => {
-					setIsLoading(false);
-				}, 1500);
-			}, 500);
+			// Simulate network delay
+			setTimeout(() => {
+				setIsLoading(false);
+			}, 1500);
+		}, 500);
+	};
+
+	const handleClearCart = () => {
+		if (microinteractionsOn) {
+			setIsModalOpen(true);
+		} else {
+			if (window.confirm("Czy na pewno chcesz wyczyścić koszyk?")) {
+				clearCartActions();
+			}
 		}
+	};
+
+	const confirmClearCart = () => {
+		setIsModalOpen(false);
+		clearCartActions();
 	};
 
 	if (isLoading && microinteractionsOn) {
@@ -43,7 +58,7 @@ const Cart: React.FC = () => {
 
 	if (items.length === 0) {
 		return (
-			<div className="w-full px-20 py-16 h-screen">
+			<div className="w-full px-20 py-8 h-screen">
 				<h1 className="text-4xl font-bold mb-16">
 					Koszyk{" "}
 					<span className="text-xl text-gray-700 font-normal ml-1">
@@ -65,9 +80,17 @@ const Cart: React.FC = () => {
 	}
 
 	return (
-		<div
-			className={`
-                w-full px-20 py-16 min-h-screen 
+		<>
+			{microinteractionsOn && (
+				<ClearCartModal
+					isOpen={isModalOpen}
+					onClose={() => setIsModalOpen(false)}
+					onConfirm={confirmClearCart}
+				/>
+			)}
+			<div
+				className={`
+                w-full px-20 py-8 min-h-screen 
                 transition-all duration-500 
                 ${
 					isClearing && microinteractionsOn
@@ -75,29 +98,29 @@ const Cart: React.FC = () => {
 						: "opacity-100 scale-100"
 				}
             `}
-		>
-			<div className="w-full max-w-7xl mx-auto">
-				<div className="flex justify-between items-center mb-10">
-					<h1 className="text-4xl font-bold mb-16">
-						Koszyk{" "}
-						<span className="text-xl text-gray-700 font-normal ml-1">
-							({totalItems} produkty)
-						</span>
-					</h1>
-					<button
-						onClick={handleClearCart}
-						className={`flex items-center gap-2 font-bold text-primary ${
-							microinteractionsOn && "hover:text-indigo-800"
-						}`}
-						disabled={isClearing}
-					>
-						<span>Wyczyść koszyk</span>
-						<Trash2 size={18} />
-					</button>
-				</div>
+			>
+				<div className="w-full max-w-7xl mx-auto">
+					<div className="flex justify-between items-center mb-10">
+						<h1 className="text-4xl font-bold mb-16">
+							Koszyk{" "}
+							<span className="text-xl text-gray-700 font-normal ml-1">
+								({totalItems} produkty)
+							</span>
+						</h1>
+						<button
+							onClick={handleClearCart}
+							className={`flex items-center gap-2 font-bold text-primary ${
+								microinteractionsOn && "hover:text-indigo-800"
+							}`}
+							disabled={isClearing}
+						>
+							<span>Wyczyść koszyk</span>
+							<Trash2 size={18} />
+						</button>
+					</div>
 
-				<div
-					className={`
+					<div
+						className={`
                         bg-white rounded-lg shadow-lg p-8 border border-gray-100
                         transition-all duration-500 
 						${
@@ -107,12 +130,12 @@ const Cart: React.FC = () => {
 								: "opacity-100 translate-y-0")
 						}
                     `}
-				>
-					<div className="flex flex-col gap-8">
-						{items.map((item) => (
-							<div
-								key={item.id}
-								className={`
+					>
+						<div className="flex flex-col gap-8">
+							{items.map((item) => (
+								<div
+									key={item.id}
+									className={`
                                     pb-8 border-b border-gray-200 last:border-b-0
                                     transition-all duration-500
                                     ${
@@ -122,14 +145,14 @@ const Cart: React.FC = () => {
 											: "opacity-100 scale-100")
 									}
                                 `}
-							>
-								<CartItem cartItem={item} />
-							</div>
-						))}
-					</div>
+								>
+									<CartItem cartItem={item} />
+								</div>
+							))}
+						</div>
 
-					<div
-						className={`
+						<div
+							className={`
                             mt-10 flex justify-end items-center gap-4
                             transition-all duration-500
                             ${
@@ -139,15 +162,15 @@ const Cart: React.FC = () => {
 									: "opacity-100 translate-y-0")
 							}
                         `}
-					>
-						<p className="text-xl font-medium">suma:</p>
-						<p className="text-4xl font-bold text-blue-600">
-							{totalPrice.toFixed(2)}zł
-						</p>
-					</div>
+						>
+							<p className="text-xl font-medium">suma:</p>
+							<p className="text-4xl font-bold text-blue-600">
+								{totalPrice.toFixed(2)}zł
+							</p>
+						</div>
 
-					<div
-						className={`
+						<div
+							className={`
                             mt-8 flex justify-between
                             transition-all duration-500
                             ${
@@ -157,24 +180,25 @@ const Cart: React.FC = () => {
 									: "opacity-100 translate-y-0")
 							}
                         `}
-					>
-						<Link
-							href="/products"
-							className={`relative text-xl rounded-xl font-bold transition-colors cursor-pointer bg-gradient-to-r from-primary to-secondary border-2 text-transparent bg-clip-text ${
-								microinteractionsOn &&
-								"hover:from-secondary hover:to-primary"
-							}`}
 						>
-							Kontynuuj zakupy
-							<span className="absolute w-full h-0.5 bg-gradient-to-r from-primary to-secondary bottom-0.5 left-0 rounded-full"></span>
-						</Link>
-						<Link href="/checkout">
-							<Button>Dostawa i płatność</Button>
-						</Link>
+							<Link
+								href="/products"
+								className={`relative text-xl rounded-xl font-bold transition-colors cursor-pointer bg-gradient-to-r from-primary to-secondary border-2 text-transparent bg-clip-text ${
+									microinteractionsOn &&
+									"hover:from-secondary hover:to-primary"
+								}`}
+							>
+								Kontynuuj zakupy
+								<span className="absolute w-full h-0.5 bg-gradient-to-r from-primary to-secondary bottom-0.5 left-0 rounded-full"></span>
+							</Link>
+							<Link href="/checkout">
+								<Button>Dostawa i płatność</Button>
+							</Link>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

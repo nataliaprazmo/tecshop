@@ -42,7 +42,7 @@ const Products: React.FC<Params> = ({ categoryId }) => {
 
 	if (loading && microinteractionsOn) {
 		return (
-			<div className="container px-20 py-16 text-2xl h-screen">
+			<div className="container px-20 py-8 text-2xl h-screen">
 				<div className="flex gap-4 items-center">
 					<Loader className="animate-spin" />
 					<p>Ładuję produkty...</p>
@@ -53,7 +53,7 @@ const Products: React.FC<Params> = ({ categoryId }) => {
 
 	if (!products || products.length == 0) {
 		return (
-			<div className="container px-20 py-16 text-2xl h-screen">
+			<div className="container px-20 py-8 text-2xl h-screen">
 				<div className="flex gap-4 items-center">
 					{microinteractionsOn && <Frown />}
 					<p>
@@ -66,7 +66,7 @@ const Products: React.FC<Params> = ({ categoryId }) => {
 	}
 
 	return (
-		<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-y-6 lg:grid-cols-3 xl:gap-x-6 xl:gap-y-8 xl:grid-cols-4 3xl:grid-cols-5 3xl:gap-x-8 3xl:gap-y-10 w-full px-20 py-12">
+		<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-y-6 lg:grid-cols-3 xl:gap-x-6 xl:gap-y-8 xl:grid-cols-4 3xl:grid-cols-5 3xl:gap-x-8 3xl:gap-y-10 w-full px-20 py-6">
 			{products.map((product) => (
 				<ProductCard key={product.id} product={product} />
 			))}

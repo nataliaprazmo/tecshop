@@ -14,9 +14,9 @@ const DetailsAccordion: React.FC<{
 			>
 				<h3 className="text-lg font-medium text-gray-900">{title}</h3>
 				{isOpen ? (
-					<ChevronUp className="h-5 w-5 text-gray-500" />
+					<ChevronUp className="h-5 w-5 text-gray-500 cursor-pointer" />
 				) : (
-					<ChevronDown className="h-5 w-5 text-gray-500" />
+					<ChevronDown className="h-5 w-5 text-gray-500 cursor-pointer" />
 				)}
 			</button>
 			<div

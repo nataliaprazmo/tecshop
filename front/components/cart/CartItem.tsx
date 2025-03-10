@@ -25,7 +25,7 @@ const CartItem: React.FC<CartItemProp> = ({ cartItem }) => {
 
 	const discountedPrice =
 		product.isDiscounted && product.discountPercent
-			? product.price * (1 - product.discountPercent / 100)
+			? (product.price * (1 - product.discountPercent / 100)).toFixed(2)
 			: product.price;
 
 	const incrementQuantity = () => {
@@ -71,15 +71,17 @@ const CartItem: React.FC<CartItemProp> = ({ cartItem }) => {
 					alt={product.name}
 					width={120}
 					height={120}
-					className="border border-gray-300 rounded-lg shadow-sm object-contain transition-all"
+					className="border border-gray-300 rounded-lg shadow-sm aspect-square object-cover transition-all"
 				/>
-				{product.isDiscounted && (
-					<span className="absolute rounded-full p-1 aspect-square text-center content-center border border-gray-200 shadow-sm bg-white font-bold text-primary left-2 top-2">
-						-{product.discountPercent}%
-					</span>
-				)}
 				<div className="ml-8 ">
-					<h3 className="text-3xl font-bold mb-2">{product.name}</h3>
+					<h3 className="text-3xl font-bold mb-2">
+						{product.name}
+						{product.isDiscounted && microinteractionsOn && (
+							<span className="text-sm text-red-600 uppercase align-middle ml-3 px-2 py-0.5 border border-red-300 bg-red-50 rounded-sm">
+								-{product.discountPercent}%
+							</span>
+						)}
+					</h3>
 					<p className="text-xl text-gray-700">
 						{product.description}
 					</p>
