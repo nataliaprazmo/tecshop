@@ -9,6 +9,7 @@ import {
 	createProduct,
 	deleteProduct,
 	getFilteredProducts,
+	searchProducts,
 } from "../services/product.service";
 
 interface Params {
@@ -32,6 +33,10 @@ interface QueryParams {
 interface DiscountBody {
 	categoryIds: number[];
 	discountPercent: number;
+}
+
+interface SearchQuery {
+	searchTerm: string;
 }
 
 export async function getProducts(
@@ -102,6 +107,26 @@ export async function getFilteredProductsHandler(
 	}
 }
 
+export async function searchProductsHandler(
+	request: FastifyRequest<{ Querystring: SearchQuery }>,
+	reply: FastifyReply
+) {
+	try {
+		const { searchTerm } = request.query;
+		if (!searchTerm || searchTerm.trim() === "") {
+			return reply.send([]);
+		}
+		const products = await searchProducts(request.server, searchTerm);
+		reply.send(products);
+	} catch (error) {
+		console.error("Error searching products:", error);
+		if (error instanceof Error) {
+			console.error("Error details:", error.message, error.stack);
+		}
+		reply.status(500).send({ error: "Error searching products" });
+	}
+}
+
 export async function getProduct(
 	request: FastifyRequest<{ Params: Params }>,
 	reply: FastifyReply
@@ -161,11 +186,9 @@ export async function applyDiscountHandler(
 		}
 
 		if (discountPercent < 0 || discountPercent > 100) {
-			return reply
-				.status(400)
-				.send({
-					error: "Discount percentage must be between 0 and 100",
-				});
+			return reply.status(400).send({
+				error: "Discount percentage must be between 0 and 100",
+			});
 		}
 
 		const result = await applyDiscountToCategory(

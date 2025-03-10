@@ -5,6 +5,7 @@ import { SalesProps } from "@/types";
 import globalState from "@/lib/globalState";
 
 const Sales: React.FC = () => {
+	const microinteractionsOn = globalState.microinteractionsEnabled;
 	const promotions: SalesProps[] = [
 		{
 			title: "PRZECENA",
@@ -27,9 +28,13 @@ const Sales: React.FC = () => {
 
 			<div className="grid md:grid-cols-2 gap-8">
 				{promotions.map((promo) => (
-					<div
+					<Link
+						href={promo.href}
 						key={promo.title}
-						className="border border-gray-200 rounded-lg overflow-hidden bg-white flex"
+						className={`border border-gray-200 rounded-lg overflow-hidden bg-white flex ${
+							microinteractionsOn &&
+							"hover:border-indigo-300 hover:bg-indigo-50 transition-all duration-300 hover:shadow-md group"
+						}`}
 					>
 						<div className="p-6 flex-1 flex flex-col items-center justify-center">
 							<h3 className="text-xl font-bold mb-2">
@@ -38,31 +43,43 @@ const Sales: React.FC = () => {
 							<p className="text-gray-600 mb-1">
 								{promo.subtitle}
 							</p>
-							<p className="text-blue-600 font-bold text-xl mb-6">
+							<p
+								className={`text-primary font-bold text-xl mb-6 ${
+									microinteractionsOn &&
+									"transition-all duration-300 group-hover:scale-110 group-hover:font-extrabold"
+								}`}
+							>
 								{promo.discount}
 							</p>
-							<Link
-								href={promo.href}
-								className={`inline-flex items-center gap-2 text-gray-700 ${
-									globalState.microinteractionsEnabled &&
-									"hover:text-primary transition-colors"
+							<div
+								className={`inline-flex items-center gap-1 text-gray-700 ${
+									microinteractionsOn &&
+									"group-hover:text-primary group-hover:font-semibold transition-colors duration-300"
 								}`}
 							>
 								<span>SPRAWDŹ</span>
-								<ArrowRight className="w-5 h-5" />
-							</Link>
+								<ArrowRight
+									className={`w-5 h-5 ${
+										microinteractionsOn &&
+										"transition-transform duration-300 group-hover:translate-x-1"
+									}`}
+								/>
+							</div>
 						</div>
 
-						<div className="flex-1 bg-gray-100">
+						<div className="flex-1 bg-gray-100 overflow-hidden">
 							<Image
 								src={promo.image}
 								alt={promo.subtitle}
 								width={400}
 								height={320}
-								className="w-full h-full object-cover"
+								className={`w-full h-full object-cover ${
+									microinteractionsOn &&
+									"transition-transform duration-300 group-hover:scale-105"
+								}`}
 							/>
 						</div>
-					</div>
+					</Link>
 				))}
 			</div>
 		</section>

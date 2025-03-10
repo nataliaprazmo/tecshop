@@ -154,7 +154,10 @@ GET http://localhost:5000/api/products?discounted=true&categoryId=3 HTTP/1.1
 ###
 
 #Get all products with filters
-GET http://localhost:5000/api/products/filtered?categoryId=5 HTTP/1.1
+GET http://localhost:5000/api/products/filtered?priceMax=700&sortBy=price&sortOrder=asc HTTP/1.1
+###
+
+GET http://localhost:5000/api/products/search?searchTerm=smartwatch
 ###
 
 # Apply discount to products in categories

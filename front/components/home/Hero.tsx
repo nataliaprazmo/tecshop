@@ -1,7 +1,8 @@
 import Image from "next/image";
-import { Star } from "react-feather";
+import { ArrowRight, Star } from "react-feather";
 import { Button } from "../ui/Button";
 import Link from "next/link";
+import globalState from "@/lib/globalState";
 
 const Hero: React.FC = () => {
 	return (
@@ -23,7 +24,19 @@ const Hero: React.FC = () => {
 						dostawa, 100% satysfakcji!
 					</p>
 					<Link href="/products">
-						<Button>Sprawdź ofertę</Button>
+						<Button
+							className={`relative overflow-hidden group ${
+								globalState.microinteractionsEnabled &&
+								"shadow-lg shadow-primary/40"
+							}`}
+						>
+							<span className="relative z-10 inline-flex items-center">
+								Sprawdź ofertę
+								{globalState.microinteractionsEnabled && (
+									<ArrowRight className="w-0 h-5 opacity-0 group-hover:w-5 group-hover:opacity-100 group-hover:ml-2 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0" />
+								)}
+							</span>
+						</Button>
 					</Link>
 				</div>
 

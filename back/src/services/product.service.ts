@@ -20,6 +20,9 @@ export async function getAllProducts(fastify: FastifyInstance) {
 			isDiscounted: true,
 			discountPercent: true,
 		},
+		orderBy: {
+			name: "asc",
+		},
 	});
 }
 
@@ -142,31 +145,33 @@ export async function getFilteredProducts(
 	}
 
 	return fastify.prisma.product.findMany(query);
+}
 
-	// // ------------------------------------
-
-	// const where: any = {
-	//     ...(filters.categoryId !== undefined && { categoryId: filters.categoryId }),
-	//     ...(filters.isDiscounted !== undefined && { isDiscounted: filters.isDiscounted }),
-	//     ...(filters.priceMin !== undefined && { price: { gte: filters.priceMin } }),
-	//     ...(filters.priceMax !== undefined && { price: { lte: filters.priceMax } })
-	// };
-
-	// // If both priceMin and priceMax are specified, combine them
-	// if (filters.priceMin !== undefined && filters.priceMax !== undefined) {
-	//     where.price = { gte: filters.priceMin, lte: filters.priceMax };
-	// }
-
-	// // Build the orderBy clause based on sort parameters
-	// let orderBy = {};
-	// if (filters.sortBy === 'price') {
-	//     orderBy = { price: filters.sortOrder };
-	// }
-
-	// return fastify.prisma.product.findMany({
-	//     where,
-	//     orderBy: Object.keys(orderBy).length > 0 ? orderBy : undefined
-	// });
+export async function searchProducts(
+	fastify: FastifyInstance,
+	searchTerm: string
+) {
+	try {
+		const lowerSearchTerm = searchTerm.toLowerCase();
+		return await fastify.prisma.$queryRaw`
+            SELECT
+                id,
+                name,
+                imagePath,
+                description,
+                price,
+                isDiscounted,
+                discountPercent
+            FROM Product
+            WHERE
+                LOWER(name) LIKE ${`%${lowerSearchTerm}%`} OR
+                LOWER(description) LIKE ${`%${lowerSearchTerm}%`}
+            ORDER BY name ASC
+        `;
+	} catch (error) {
+		console.error("Database query error:", error);
+		throw error;
+	}
 }
 
 export async function applyDiscountToCategory(

@@ -8,6 +8,7 @@ import {
 	applyDiscountHandler,
 	removeDiscountHandler,
 	getFilteredProductsHandler,
+	searchProductsHandler,
 } from "../controllers/product.controller";
 
 export default async function productRoutes(fastify: FastifyInstance) {
@@ -18,7 +19,8 @@ export default async function productRoutes(fastify: FastifyInstance) {
 	);
 	fastify.get("/products/:id", getProduct);
 	fastify.post("/products", createProductHandler);
-	fastify.get("/api/products/filtered", getFilteredProductsHandler);
+	fastify.get("/products/filtered", getFilteredProductsHandler);
+	fastify.get("/products/search", searchProductsHandler);
 	fastify.delete("/products/:id", deleteProductHandler);
 	fastify.post("/products/discounts", applyDiscountHandler);
 	fastify.delete("/products/discounts", removeDiscountHandler);

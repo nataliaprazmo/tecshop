@@ -17,22 +17,27 @@ const ProductCard: React.FC<ProductParam> = ({ product }) => {
 		<div
 			className={`w-full h-fit flex flex-col items-start justify-between ${
 				globalState.microinteractionsEnabled &&
-				"p-1 hover:scale-105 hover:bg-indigo-100 hover:border hover:border-indigo-200 transition-all hover:rounded-2xl"
+				"p-1 hover:scale-105 hover:bg-indigo-50 hover:border hover:border-indigo-300 transition-all hover:rounded-2xl hover:shadow-lg hover:shadow-indigo-300/70 group"
 			}`}
 		>
-			<Link href={`/products/details/${product.id}`} className="relative">
+			<Link
+				href={`/products/details/${product.id}`}
+				className="relative rounded-2xl overflow-hidden"
+			>
 				<Image
 					src={product.imagePath}
 					alt={product.name}
 					width={400}
 					height={300}
-					className="aspect-[4/3] object-cover border border-gray-200 rounded-2xl shadow-sm"
+					className={`aspect-[4/3] object-cover border border-gray-200 rounded-2xl shadow-sm ${
+						globalState.microinteractionsEnabled && "cursor-zoom-in"
+					}`}
 				/>
 				<h3 className="mt-3 font-bold text-2xl">
 					{product.name}
 					{product.isDiscounted &&
 						globalState.microinteractionsEnabled && (
-							<span className="text-sm text-red-600 uppercase align-middle ml-2 px-2 py-0.5 border border-red-300 bg-red-50 rounded-sm">
+							<span className="text-sm text-red-600 uppercase align-middle ml-2 px-2 py-0.5 border border-red-300 bg-red-50 rounded-sm transition-all group-hover:shadow group-hover:shadow-red-500/40 group-hover:border-red-400">
 								-{product.discountPercent}%
 							</span>
 						)}
