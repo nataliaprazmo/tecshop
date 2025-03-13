@@ -37,34 +37,40 @@ const Sales: React.FC = () => {
 						}`}
 					>
 						<div className="p-6 flex-1 flex flex-col items-center justify-center">
-							<h3 className="text-xl font-bold mb-2">
+							<h3
+								className={`text-xl mb-2 ${
+									microinteractionsOn && "font-bold"
+								}`}
+							>
 								{promo.title}
 							</h3>
 							<p className="text-gray-600 mb-1">
 								{promo.subtitle}
 							</p>
 							<p
-								className={`text-primary font-bold text-xl mb-6 ${
+								className={`text-xl mb-6 ${
 									microinteractionsOn &&
-									"transition-all duration-300 group-hover:scale-110 group-hover:font-extrabold"
+									"text-primary font-bold transition-all duration-300 group-hover:scale-110 group-hover:font-extrabold"
 								}`}
 							>
 								{promo.discount}
 							</p>
-							<div
-								className={`inline-flex items-center gap-1 text-gray-700 ${
-									microinteractionsOn &&
-									"group-hover:text-primary group-hover:font-semibold transition-colors duration-300"
-								}`}
-							>
-								<span>SPRAWDŹ</span>
-								<ArrowRight
-									className={`w-5 h-5 ${
+							{microinteractionsOn && (
+								<div
+									className={`inline-flex items-center gap-1 text-gray-700 ${
 										microinteractionsOn &&
-										"transition-transform duration-300 group-hover:translate-x-1"
+										"group-hover:text-primary group-hover:font-semibold transition-colors duration-300"
 									}`}
-								/>
-							</div>
+								>
+									<span>SPRAWDŹ</span>
+									<ArrowRight
+										className={`w-5 h-5 ${
+											microinteractionsOn &&
+											"transition-transform duration-300 group-hover:translate-x-1"
+										}`}
+									/>
+								</div>
+							)}
 						</div>
 
 						<div className="flex-1 bg-gray-100 overflow-hidden">

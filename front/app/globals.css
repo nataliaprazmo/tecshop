@@ -22,3 +22,25 @@ body {
 	--breakpoint-3xl: 102rem;
 	--spacing-46: 11.75rem;
 }
+
+.custom-scrollbar::-webkit-scrollbar {
+	width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+	background-color: rgba(203, 213, 225, 0.7);
+	border-radius: 20px;
+}
+
+.custom-scrollbar {
+	scrollbar-width: thin;
+	scrollbar-color: rgba(203, 213, 225) rgba(203, 213, 225, 0.2);
+}
+
+nextjs-portal {
+	display: none;
+}

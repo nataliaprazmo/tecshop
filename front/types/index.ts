@@ -97,6 +97,14 @@ export interface ProductWithoutDetailsProps {
 	discountPercent: number;
 }
 
+export interface SearchResult {
+	id: number;
+	name: string;
+	price: number;
+	imagePath: string;
+	categoryId: string;
+}
+
 export interface CartItem {
 	id: number;
 	productId: number;

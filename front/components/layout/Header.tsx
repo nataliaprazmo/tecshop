@@ -3,13 +3,11 @@ import SearchInput from "../ui/SearchInput";
 import { ShoppingCart, ChevronDown } from "react-feather";
 import LoginHandler from "./LoginHandler";
 import globalState from "@/lib/globalState";
+import NavLink from "./NavLink";
 
 const Header: React.FC = () => {
-	const linkMicrointeractionsClasses = globalState.microinteractionsEnabled
-		? "hover:font-bold transition-all"
-		: "";
 	return (
-		<header className="w-screen overflow-hidden flex items-center justify-between px-20 py-8 shadow">
+		<header className="w-full flex items-center justify-between px-20 py-6 shadow">
 			<Link
 				href="/"
 				className={`text-3xl 2xl:text-4xl font-bold min-w-36 2xl:min-w-[164px] ${
@@ -20,18 +18,8 @@ const Header: React.FC = () => {
 				TecSklep
 			</Link>
 			<div>
-				<Link
-					href="/"
-					className={`text-base 2xl:text-xl mr-4 2xl:mr-6 ${linkMicrointeractionsClasses}`}
-				>
-					Strona główna
-				</Link>
-				<Link
-					href="/products"
-					className={`text-base 2xl:text-xl ${linkMicrointeractionsClasses}`}
-				>
-					Produkty
-				</Link>
+				<NavLink route="/" linkName="Strona główna" />
+				<NavLink route="/products" linkName="Produkty" />
 			</div>
 			<div className="flex items-center gap-8 2xl:gap-10">
 				<SearchInput />

@@ -25,7 +25,8 @@ export function Button({
 			microinteractionsOn && "hover:bg-purple-600"
 		}`,
 		outline: `border border-gray-400 text-gray-700 ${
-			microinteractionsOn && "hover:bg-gray-100"
+			microinteractionsOn &&
+			"hover:bg-indigo-50 hover:border-indigo-400 hover:text-primary transition-colors"
 		}`,
 	};
 

@@ -64,14 +64,14 @@ const ProductDetails: React.FC<ProductDetailsComponentProps> = ({
 		);
 	}
 	return (
-		<div className="px-20 py-6 grid grid-cols-2 gap-8 items-center">
+		<div className="px-20 py-6 grid grid-cols-2 gap-8 items-start">
 			<div>
 				<Image
 					src={product.imagePath}
 					alt={product.name}
 					width={600}
 					height={600}
-					className="w-full h-full object-cover rounded-2xl"
+					className="w-full h-full object-cover rounded-2xl mt-4"
 				/>
 			</div>
 			<ProductInfo {...product} />

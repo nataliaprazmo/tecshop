@@ -158,10 +158,7 @@ export async function searchProducts(
                 id,
                 name,
                 imagePath,
-                description,
-                price,
-                isDiscounted,
-                discountPercent
+                categoryId
             FROM Product
             WHERE
                 LOWER(name) LIKE ${`%${lowerSearchTerm}%`} OR

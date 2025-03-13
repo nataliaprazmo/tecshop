@@ -47,7 +47,11 @@ const ProductCard: React.FC<ProductParam> = ({ product }) => {
 				</p>
 			</Link>
 			<div className="flex justify-between items-center w-full">
-				<p className="text-primary font-bold text-xl flex flex-col">
+				<p
+					className={`font-bold text-xl flex flex-col ${
+						globalState.microinteractionsEnabled && "text-primary"
+					}`}
+				>
 					{product.isDiscounted ? (
 						<>
 							<span className="line-through text-gray-400 font-normal text-sm -mb-1">

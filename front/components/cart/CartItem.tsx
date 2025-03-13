@@ -88,7 +88,11 @@ const CartItem: React.FC<CartItemProp> = ({ cartItem }) => {
 				</div>
 			</Link>
 			<div className="flex">
-				<p className="font-bold text-primary text-2xl mr-16">
+				<p
+					className={`font-bold text-2xl mr-16 ${
+						microinteractionsOn && "text-primary"
+					}`}
+				>
 					{product.isDiscounted ? (
 						<>
 							<span className="line-through text-gray-400 font-normal text-sm -mb-1">

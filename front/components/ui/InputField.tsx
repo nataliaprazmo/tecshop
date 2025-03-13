@@ -27,10 +27,14 @@ const InputField: React.FC<InputFieldProps> = ({
 					onBlur={onBlur}
 					placeholder={placeholder}
 					className={`w-full px-4 py-3 border rounded-lg ${
+						touched && error && microinteractionsOn
+							? "border-red-700"
+							: touched && error && "border-red-700"
+					} ${
 						microinteractionsOn &&
 						`focus:outline-none focus:ring-2 ${
 							touched && error
-								? "border-red-700 focus:ring-red-200"
+								? "focus:ring-red-200"
 								: touched && !error
 								? "border-primary focus:ring-indigo-200"
 								: "border-gray-300 focus:ring-blue-200"

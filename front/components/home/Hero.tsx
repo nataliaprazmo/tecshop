@@ -13,7 +13,9 @@ const Hero: React.FC = () => {
 						Najlepsza technologia w Twoich rękach
 					</h1>
 					<div className="flex items-center mb-3 gap-2">
-						<Star className="w-4 h-4 2xl:w-5 2xl:h-5 text-secondary" />
+						{globalState.microinteractionsEnabled && (
+							<Star className="w-4 h-4 2xl:w-5 2xl:h-5 text-secondary" />
+						)}
 						<span className="text-base 2xl:text-xl font-semibold">
 							Topowe marki, autoryzowany sklep, gwarancja jakości
 						</span>

@@ -67,19 +67,18 @@ const Breadcrumbs: React.FC = () => {
 			{breadcrumbs.map((breadcrumb, index) => (
 				<li key={breadcrumb.path} className="flex items-center">
 					{index > 0 && (
-						<span className="mx-1.5 text-gray-500">
+						<span className="mx-1.5">
 							<ChevronRight size={16} />
 						</span>
 					)}
 					{index === breadcrumbs.length - 1 ? (
-						<span>{breadcrumb.label}</span>
+						<span className="text-gray-800 font-semibold">
+							{breadcrumb.label}
+						</span>
 					) : (
 						<Link
 							href={breadcrumb.path}
-							className={`text-gray-600 ${
-								globalState.microinteractionsEnabled &&
-								"hover:text-primary transition-colors"
-							}`}
+							className="text-gray-600 hover:text-primary transition-colors"
 						>
 							{breadcrumb.label}
 						</Link>

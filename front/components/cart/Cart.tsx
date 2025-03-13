@@ -61,9 +61,11 @@ const Cart: React.FC = () => {
 			<div className="w-full px-20 py-8 h-screen">
 				<h1 className="text-4xl font-bold mb-16">
 					Koszyk{" "}
-					<span className="text-xl text-gray-700 font-normal ml-1">
-						(0 produktów)
-					</span>
+					{microinteractionsOn && (
+						<span className="text-xl text-gray-700 font-normal ml-1">
+							(0 produktów)
+						</span>
+					)}
 				</h1>
 				<p className="text-2xl font-semibold mb-4">
 					Twój koszyk jest pusty
@@ -103,14 +105,17 @@ const Cart: React.FC = () => {
 					<div className="flex justify-between items-center mb-10">
 						<h1 className="text-4xl font-bold mb-16">
 							Koszyk{" "}
-							<span className="text-xl text-gray-700 font-normal ml-1">
-								({totalItems} produkty)
-							</span>
+							{microinteractionsOn && (
+								<span className="text-xl text-gray-700 font-normal ml-1">
+									({totalItems} produkty)
+								</span>
+							)}
 						</h1>
 						<button
 							onClick={handleClearCart}
-							className={`flex items-center gap-2 font-bold text-primary ${
-								microinteractionsOn && "hover:text-indigo-800"
+							className={`flex items-center gap-2 font-bold ${
+								microinteractionsOn &&
+								"text-primary hover:text-indigo-800"
 							}`}
 							disabled={isClearing}
 						>
@@ -164,7 +169,11 @@ const Cart: React.FC = () => {
                         `}
 						>
 							<p className="text-xl font-medium">suma:</p>
-							<p className="text-4xl font-bold text-blue-600">
+							<p
+								className={`text-4xl font-bold ${
+									microinteractionsOn && "text-primary"
+								}`}
+							>
 								{totalPrice.toFixed(2)}zł
 							</p>
 						</div>
@@ -183,13 +192,15 @@ const Cart: React.FC = () => {
 						>
 							<Link
 								href="/products"
-								className={`relative text-xl rounded-xl font-bold transition-colors cursor-pointer bg-gradient-to-r from-primary to-secondary border-2 text-transparent bg-clip-text ${
+								className={`relative text-xl rounded-xl font-bold ${
 									microinteractionsOn &&
-									"hover:from-secondary hover:to-primary"
+									"transition-colors cursor-pointer bg-gradient-to-r from-primary to-secondary border-2 text-transparent bg-clip-text hover:from-secondary hover:to-primary"
 								}`}
 							>
 								Kontynuuj zakupy
-								<span className="absolute w-full h-0.5 bg-gradient-to-r from-primary to-secondary bottom-0.5 left-0 rounded-full"></span>
+								{microinteractionsOn && (
+									<span className="absolute w-full h-0.5 bg-gradient-to-r from-primary to-secondary bottom-0.5 left-0 rounded-full"></span>
+								)}
 							</Link>
 							<Link href="/checkout">
 								<Button>Dostawa i płatność</Button>

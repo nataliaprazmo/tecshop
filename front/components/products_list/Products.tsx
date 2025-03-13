@@ -66,7 +66,7 @@ const Products: React.FC<Params> = ({ categoryId }) => {
 	}
 
 	return (
-		<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-y-6 lg:grid-cols-3 xl:gap-x-6 xl:gap-y-8 xl:grid-cols-4 3xl:grid-cols-5 3xl:gap-x-8 3xl:gap-y-10 w-full px-20 py-6">
+		<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-y-6 lg:grid-cols-3 xl:gap-x-6 xl:gap-y-8 xl:grid-cols-4 3xl:grid-cols-5 3xl:gap-x-6 3xl:gap-y-5 w-full px-20 py-6">
 			{products.map((product) => (
 				<ProductCard key={product.id} product={product} />
 			))}

@@ -133,7 +133,7 @@ const ProductInfo: React.FC<ProductDetailsProps> = ({
 
 	return (
 		<div className="flex flex-col justify-between items-start h-full">
-			<div className="w-full">
+			<div className="w-full mb-4">
 				<div className="flex justify-between items-start mb-2">
 					<h1 className="text-3xl font-bold text-gray-900">
 						{name}
@@ -144,7 +144,12 @@ const ProductInfo: React.FC<ProductDetailsProps> = ({
 								</span>
 							)}
 					</h1>
-					<p className="text-3xl font-bold text-primary">
+					<p
+						className={`text-3xl font-bold ${
+							globalState.microinteractionsEnabled &&
+							"text-primary"
+						}`}
+					>
 						{isDiscounted ? (
 							<>
 								<span className="line-through text-gray-400 font-normal text-sm -mb-1">

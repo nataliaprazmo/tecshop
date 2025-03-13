@@ -1,5 +1,5 @@
 const globalState = {
-	microinteractionsEnabled: true,
+	microinteractionsEnabled: false,
 };
 
 export default globalState;
