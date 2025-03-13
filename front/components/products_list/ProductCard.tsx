@@ -48,7 +48,7 @@ const ProductCard: React.FC<ProductParam> = ({ product }) => {
 			</Link>
 			<div className="flex justify-between items-center w-full">
 				<p
-					className={`font-bold text-xl flex flex-col ${
+					className={`font-bold text-lg 1xl:text-xl flex flex-col ${
 						globalState.microinteractionsEnabled && "text-primary"
 					}`}
 				>

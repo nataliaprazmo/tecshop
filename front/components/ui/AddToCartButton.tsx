@@ -69,7 +69,7 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
 
 	return (
 		<div
-			className="relative transition-all px-6 w-46 h-10 rounded-xl cursor-pointer bg-gradient-to-r hover:bg-gradient-to-l from-primary to-secondary text-white font-bold flex gap-2 items-center justify-center"
+			className="relative text-sm 1xl:text-base transition-all px-6 w-46 h-10 rounded-xl cursor-pointer bg-gradient-to-r hover:bg-gradient-to-l from-primary to-secondary text-white font-bold flex gap-2 items-center justify-center"
 			onMouseEnter={() => setIsHovered(true)}
 			onMouseLeave={() => setIsHovered(false)}
 		>

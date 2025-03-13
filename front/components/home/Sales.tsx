@@ -8,14 +8,14 @@ const Sales: React.FC = () => {
 	const microinteractionsOn = globalState.microinteractionsEnabled;
 	const promotions: SalesProps[] = [
 		{
-			title: "PRZECENA",
+			title: "PROMOCJA",
 			subtitle: "Wszystkie Smartwatche",
 			discount: "-10%",
 			image: "/images/smartwatch.png",
 			href: "/products/4",
 		},
 		{
-			title: "WYPRZEDAŻ",
+			title: "PROMOCJA",
 			subtitle: "Słuchawki bezprzewodowe",
 			discount: "-25%",
 			image: "/images/headphones.png",

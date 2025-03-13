@@ -19,6 +19,7 @@ body {
 	--color-primary: #1e3fe4;
 	--color-secondary: #7a15d3;
 	--shadow-base: 0 1px 3px 0 rgb(0 0 0 / 0.25);
+	--breakpoint-1xl: 86rem;
 	--breakpoint-3xl: 102rem;
 	--spacing-46: 11.75rem;
 }
