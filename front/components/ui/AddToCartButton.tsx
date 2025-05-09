@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, ChevronDown, ChevronUp, ShoppingCart } from "react-feather";
+import { ChevronDown, ChevronUp, ShoppingCart } from "react-feather";
 import { useCart } from "@/context/CartContext";
 import { ProductDetailsProps } from "@/types";
 import globalState from "@/lib/globalState";

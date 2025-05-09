@@ -129,7 +129,7 @@ const ProductInfo: React.FC<ProductDetailsProps> = ({
 			}
 		};
 		getCategoryName();
-	}, []);
+	}, [categoryId]);
 
 	return (
 		<div className="flex flex-col justify-between items-start h-full">

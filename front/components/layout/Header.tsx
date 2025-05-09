@@ -1,6 +1,6 @@
 import Link from "next/link";
 import SearchInput from "../ui/SearchInput";
-import { ShoppingCart, ChevronDown } from "react-feather";
+import { ShoppingCart } from "react-feather";
 import LoginHandler from "./LoginHandler";
 import globalState from "@/lib/globalState";
 import NavLink from "./NavLink";

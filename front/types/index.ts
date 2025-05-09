@@ -128,3 +128,8 @@ export interface CartContextProps {
 	updateQuantity: (id: number, quantity: number) => Promise<void>;
 	syncCartWithDatabase: () => Promise<void>;
 }
+
+export type FieldError = {
+	field: string;
+	message: string;
+};

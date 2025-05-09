@@ -38,7 +38,7 @@ const Products: React.FC<Params> = ({ categoryId }) => {
 		};
 
 		fetchProduct();
-	}, []);
+	}, [categoryId]);
 
 	if (loading && microinteractionsOn) {
 		return (

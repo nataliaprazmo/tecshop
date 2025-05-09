@@ -1,6 +1,6 @@
 "use client";
 
-import { AuthFormProps, LoginProps } from "@/types";
+import { AuthFormProps, FieldError, LoginProps } from "@/types";
 import { useState } from "react";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { submitLoginForm } from "@/utils/authSubmit";
@@ -74,8 +74,8 @@ const LoginForm: React.FC<AuthFormProps> = ({ changeForm }) => {
 						error !== null &&
 						"field" in error &&
 						"message" in error &&
-						typeof (error as any).field === "string" &&
-						typeof (error as any).message === "string"
+						typeof (error as FieldError).field === "string" &&
+						typeof (error as FieldError).message === "string"
 					);
 				}
 

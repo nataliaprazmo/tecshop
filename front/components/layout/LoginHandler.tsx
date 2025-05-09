@@ -5,7 +5,7 @@ import { Button } from "../ui/Button";
 import { useEffect, useState } from "react";
 
 const LoginHandler: React.FC = () => {
-	const [isLoggedIn, setIsLoggedIn] = useState<Boolean>();
+	const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
 
 	const checkLogin = async () => {
 		try {
