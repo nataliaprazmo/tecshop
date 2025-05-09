@@ -42,7 +42,7 @@ Before you begin, ensure the following tools are installed on your machine:
 ### **1️⃣ Clone the Repository**
 
 ```bash
-  git clone https://
+  git clone https://gitlab.com/nataliaprazmo/tecsklep.git
   cd mgr_app
 ```
 
@@ -115,7 +115,7 @@ You now have the full application running locally — both frontend and backend 
 
 <br/>
 <div style="display: flex; flex-direction: column; gap: 16px; justify-content: center; align-items: center;">
-    <img alt="Demo" src="./demo/demo.PNG" >
-    <img alt="Demo2" src="./demo/demo2.PNG" >
-    <img alt="Demo2" src="./demo/demo3.PNG" >
+    <img alt="Demo" src="./demo/demo.png" >
+    <img alt="Demo2" src="./demo/demo2.png" >
+    <img alt="Demo2" src="./demo/demo3.png" >
 </div>
